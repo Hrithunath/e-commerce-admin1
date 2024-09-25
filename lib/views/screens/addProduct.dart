@@ -1,3 +1,5 @@
+import 'package:e_commerce_admin/views/screens/product.dart';
+import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
 import 'package:flutter/material.dart';
@@ -137,10 +139,23 @@ class AddProduct extends StatelessWidget {
                                 ),
                               ],
                             ),
+                             
+
+                            
                           ],
                         ),
                       ),
                     ),
+                     SizedBox(height: screenHeight * 0.02),
+                     Center(
+                       child: ButtonCustomized(text:"Add Product",
+                       height: screenHeight*0.05,
+                               color: const Color.fromARGB(255, 192, 42, 219), 
+                               onPressed: (){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context)=>const ProductList()));
+                               }),
+                     )
                   ],
                 ),
               ),
@@ -178,7 +193,44 @@ class AddProduct extends StatelessWidget {
                                 IconButton(onPressed: (){}, icon: const Icon(Icons.add,size: 33,)),
                               ],
                             ),
-                           
+                             SizedBox(height: screenHeight * 0.02),
+                           SizedBox(
+                            height: screenHeight * 0.1,
+                             child: CarouselView(itemExtent: screenWidth * 0.06,
+                              children: List.generate(10,(int index){
+                              return Container(
+                                color: Colors.white
+                              );
+                             }),),
+                           ),
+                           SizedBox(height: screenHeight * 0.07),
+                            TextCustom(
+                              text: "Category",
+                              fontSize: 19,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            SizedBox(height: screenHeight * 0.02),
+                            TextCustom(
+                              text: "Product Category",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: screenHeight * 0.02),
+                            Container(
+                              
+                              height: 50,
+                              width: 250,
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  IconButton(onPressed: (){},
+                                   icon: const Icon(Icons.arrow_drop_down_outlined)),
+                                ],
+                              ),
+                            ),
+
                         ],
                       ),
                     ),
