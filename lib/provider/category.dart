@@ -1,13 +1,20 @@
+
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_admin/view_models/catergoryshoe.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class CategoryShoe extends ChangeNotifier {
   List<CategoryModel> categories = [];
   Uint8List? pickedImage;
+  String? selectedCategory;
+
+  CategoryShoe(){
+    fetchCategories();
+  }
 
   final FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -20,19 +27,30 @@ class CategoryShoe extends ChangeNotifier {
         final category = CategoryModel(
           categoryName: categoryName,
           imageUrl: imageUrl,
-          id: 'id', // Consider using a unique ID generation method here
+          id: generateRandomId(), 
         );
 
         await FirebaseFirestore.instance.collection("categories").add(category.toJson());
         categories.add(category);
         notifyListeners();
       }
+
+      
     }
   } catch (e) {
     print("Error adding Category: $e");
   }
 }
-
+  
+  Future<void> fetchCategories() async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('categories').get();
+      categories = snapshot.docs.map((doc) => CategoryModel.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      notifyListeners();
+    } catch (e) {
+      print("Error fetching categories: $e");
+    }
+  }
 
   Future<void> pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -51,6 +69,7 @@ class CategoryShoe extends ChangeNotifier {
 
   Future<String> uploadImage() async {
     try {
+
       final storageRef = storage.ref().child('categoryImages/${DateTime.now().millisecondsSinceEpoch}.png');
       UploadTask uploadTask = storageRef.putData(pickedImage!);
       TaskSnapshot snapshot = await uploadTask;
@@ -89,8 +108,20 @@ class CategoryShoe extends ChangeNotifier {
     }
   }
 
+  void setCategory(String Category){
+    selectedCategory = Category;
+    notifyListeners();
+  }
+
   void clearPickedImage() {
     pickedImage = null;
     notifyListeners();
   }
+
+   String generateRandomId() {
+  final Random random = Random();
+  return 'category_${random.nextInt(10000)}'; 
 }
+}
+ 
+

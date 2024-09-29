@@ -18,8 +18,7 @@ class AddCategory extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final categoryShoe = Provider.of<CategoryShoe>(context);
 
-    return Scaffold(
-      body: Padding(
+    return  Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
         child: Column(
           children: [
@@ -64,9 +63,10 @@ class AddCategory extends StatelessWidget {
                         final category = CategoryModel(
                           categoryName: categoryController.text,
                           imageUrl: imageUrl,
-                          id: DateTime.now().millisecondsSinceEpoch.toString(), // Use unique ID
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
                         );
-                        await categoryShoe.createCategory(category as String);
+                        await categoryShoe.createCategory(category.categoryName);
+                       
                         categoryController.clear();
                         categoryShoe.clearPickedImage();
                       } else {
@@ -161,8 +161,8 @@ class AddCategory extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+    
   }
 }
 

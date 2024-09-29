@@ -1,6 +1,9 @@
 import 'package:e_commerce_admin/firebase_options.dart';
 import 'package:e_commerce_admin/provider/category.dart';
-import 'package:e_commerce_admin/views/screens/addcategory.dart';
+import 'package:e_commerce_admin/provider/product.dart';
+import 'package:e_commerce_admin/provider/sidebar.dart';
+import 'package:e_commerce_admin/provider/size.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/drawer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +19,9 @@ await Firebase.initializeApp(
        MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryShoe()),
+        ChangeNotifierProvider(create: (_) => ProductShoe()),
+        ChangeNotifierProvider(create: (_) => SizeProvider()),
+        ChangeNotifierProvider(create: (_) => SidebarProvider(),)
       ],
       child: const MyApp(),
     ),
@@ -27,9 +33,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return  const MaterialApp(
       debugShowCheckedModeBanner: false,
-     home: AddCategory() 
+     home: Sidebar()  
       );
   }
   

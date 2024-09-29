@@ -1,5 +1,8 @@
+import 'package:e_commerce_admin/provider/category.dart';
+import 'package:e_commerce_admin/provider/product.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductList extends StatelessWidget {
   const ProductList({super.key});
@@ -8,8 +11,10 @@ class ProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Padding(
+    final productShoe = Provider.of<ProductShoe>(context);
+    final categoryShoe = Provider.of<CategoryShoe>(context);
+    return 
+       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
@@ -44,11 +49,10 @@ class ProductList extends StatelessWidget {
                                 children: [
                                   TextCustom(text: "Sl NO"),
                                   TextCustom(text: "Image"),
-                        
                                   TextCustom(text: "Product Name"),
                                   TextCustom(text: "Category"),
                                   TextCustom(text: "Stock"),
-                                  TextCustom(text: "Status"),
+                                  TextCustom(text: "Price"),
                                   TextCustom(text: "Actions"),
                                 ],
                               ),
@@ -58,8 +62,13 @@ class ProductList extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: 150,
+                          itemCount: productShoe.products.length,
                           itemBuilder: (context, index) {
+                            final product = productShoe.products[index];
+                            final category = categoryShoe.categories.isNotEmpty
+                                ? categoryShoe.categories[index]
+                                : null;
+
                             return Table(
                               children: [
                                 TableRow(
@@ -70,22 +79,49 @@ class ProductList extends StatelessWidget {
                                       width: 50,
                                       child: Align(
                                         alignment: Alignment.bottomLeft,
-                                        child: Image.network(
-                                                                        "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/78b1c276-1a6e-4048-a5c8-6f8d1747e837/PEGASUS+PLUS.png",
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                          return  Text(
-                                            'Error loading image${error}',
-                                            style: TextStyle(color: Colors.red),
-                                          );
-                                        }),
+                                        child: (product.uploadImages != null &&
+                                                product
+                                                    .uploadImages!.isNotEmpty)
+                                            ? Image.network(
+                                                product.uploadImages![0],
+                                                height: screenHeight * 0.05,
+                                                width: screenWidth * 0.04,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Container(
+                                                    height: screenHeight * 0.05,
+                                                    width: screenWidth * 0.04,
+                                                    color: Colors.red,
+                                                    child: const Center(
+                                                        child: Icon(Icons.error,
+                                                            color:
+                                                                Colors.white)),
+                                                  );
+                                                },
+                                              )
+                                            : Container(
+                                                height: screenHeight * 0.05,
+                                                width: screenWidth * 0.04,
+                                                color: Colors.amber,
+                                                child: const Center(
+                                                    child: Icon(Icons.image,
+                                                        color: Colors.white)),
+                                              ),
                                       ),
                                     ),
-                                   
-                                    TextCustom(text: "Product Name"),
-                                    TextCustom(text: "Category"),
-                                    TextCustom(text: "Stock"),
-                                    TextCustom(text: "Status"),
+                                    TextCustom(
+                                        text: product.productName ??
+                                            "Unknown Product"),
+                                    TextCustom(
+                                        text: category?.categoryName ??
+                                            "No Category"),
+                                    TextCustom(
+                                        text:
+                                            product.stock?.toString() ?? "N/A"),
+                                    TextCustom(
+                                        text:
+                                            product.price?.toString() ?? "N/A"),
                                     TextCustom(text: "Actions"),
                                   ],
                                 ),
@@ -101,7 +137,7 @@ class ProductList extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+    
   }
 }

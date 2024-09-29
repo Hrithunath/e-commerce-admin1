@@ -11,16 +11,7 @@ class AdminBanner extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-            child: TextCustom(
-          text: "Banner Management",
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        )),
-      ),
-      body: Padding(
+    return Padding(
         padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.05,
           vertical: screenHeight * 0.02,
@@ -69,8 +60,8 @@ class AdminBanner extends StatelessWidget {
           ),
           
         ]),
-      ),
+      );
       
-    );
+    
   }
 }
