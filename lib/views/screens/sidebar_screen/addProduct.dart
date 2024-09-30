@@ -1,9 +1,9 @@
-import 'package:e_commerce_admin/provider/product.dart';
-import 'package:e_commerce_admin/provider/size.dart';
-import 'package:e_commerce_admin/views/screens/product.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
+import 'package:e_commerce_admin/view_model/provider/size.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
-import 'package:e_commerce_admin/views/widgets/size_widget.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
 import 'package:flutter/material.dart';
@@ -11,21 +11,20 @@ import 'package:provider/provider.dart';
 
 class AddProduct extends StatelessWidget {
   AddProduct({super.key});
-  final ProductNameController = TextEditingController();
-  final ProductDescriptionController = TextEditingController();
-  final PriceController = TextEditingController();
-  final StockController = TextEditingController();
-  final List<String> sizes = [];
-  final List<String> selectedImages = [];
-  
+  final productNameController = TextEditingController();
+  final productDescriptionController = TextEditingController();
+  final priceController = TextEditingController();
+  final stockController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final productShoe = Provider.of<ProductShoe>(context);
-    int imagesLength = productShoe.pickedImages?.length ?? 0;
     final formkey = GlobalKey<FormState>();
-    return Padding(
+
+    return Scaffold(
+      body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
         child: SingleChildScrollView(
@@ -70,7 +69,7 @@ class AddProduct extends StatelessWidget {
                               Textformfeildcustom(
                                 label: "",
                                 backgroundcolor: Colors.white,
-                                controller: ProductNameController,
+                                controller: productNameController,
                                 keyboardType: TextInputType.name,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -87,11 +86,10 @@ class AddProduct extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                               ),
                               Textformfeildcustom(
+                                maxLines: 6,
                                 label: "",
                                 backgroundcolor: Colors.white,
-                                height: screenHeight * 0.3,
-                                width: screenWidth * 0.9,
-                                controller: ProductDescriptionController,
+                                controller: productDescriptionController,
                                 keyboardType: TextInputType.text,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -130,7 +128,7 @@ class AddProduct extends StatelessWidget {
                                         Textformfeildcustom(
                                           label: "",
                                           backgroundcolor: Colors.white,
-                                          controller: PriceController,
+                                          controller: priceController,
                                           keyboardType: TextInputType.number,
                                           validator: (value) {
                                             if (value == null ||
@@ -154,7 +152,7 @@ class AddProduct extends StatelessWidget {
                                         Textformfeildcustom(
                                           label: "",
                                           backgroundcolor: Colors.white,
-                                          controller: StockController,
+                                          controller: stockController,
                                           keyboardType: TextInputType.number,
                                           validator: (value) {
                                             if (value == null ||
@@ -168,6 +166,23 @@ class AddProduct extends StatelessWidget {
                                     ),
                                   ),
                                 ],
+                              ),
+                              // New Arrival
+                              CheckboxListTile(
+                                title: const Text("New Arrival"),
+                                value: productShoe.isNewArrival,
+                                onChanged: (bool? value) {
+                                  productShoe.toggleNewArrival();
+                                },
+                              ),
+
+                              // Top Collection
+                              CheckboxListTile(
+                                title: const Text("Top Collection"),
+                                value: productShoe.isTopCollection,
+                                onChanged: (bool? value) {
+                                  productShoe.toggleTopCollection();
+                                },
                               ),
                             ],
                           ),
@@ -186,20 +201,37 @@ class AddProduct extends StatelessWidget {
                                       listen: false)
                                   .selectedSize;
 
-                              final double price =
-                                  double.tryParse(PriceController.text) ?? 0;
+                              final double? price =
+                                  double.tryParse(priceController.text);
                               final int stock =
-                                  int.tryParse(StockController.text) ?? 0;
+                                  int.tryParse(stockController.text) ?? 0;
 
                               productShoe.createProduct(
-                                productName: ProductNameController.text,
+                                productName: productNameController.text,
                                 productDescription:
-                                    ProductDescriptionController.text,
+                                  productDescriptionController.text,
                                 sizes: selectedSizes,
-                                price: price,
+                                price: price!,
+                                
                                 stock: stock,
-                                category:
-                                    "category", 
+                                category: "category",
+                                isNewArrival: productShoe.isNewArrival,
+                                isTopCollection: productShoe.isTopCollection,
+                              );
+                              print("price${price}");
+                              // Clear all fields and selections
+                              productNameController.clear();
+                              productDescriptionController.clear();
+                              priceController.clear();
+                              stockController.clear();
+                              Provider.of<SizeProvider>(context, listen: false)
+                                  .clearSize();
+                              productShoe.clearPickedImages();
+                              productShoe.resetCheckboxes();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Product added successfully!'),
+                                ),
                               );
 
                               Navigator.of(context).push(
@@ -212,14 +244,14 @@ class AddProduct extends StatelessWidget {
                             }
                           },
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.09,
+                        horizontal: screenWidth * 0.05,
                         vertical: screenHeight * 0.09),
                     child: Container(
                       height: screenHeight * 0.8,
@@ -250,8 +282,6 @@ class AddProduct extends StatelessWidget {
                                           productShoe.pickedImages!.isNotEmpty
                                       ? Image.memory(
                                           productShoe.pickedImages![0],
-
-                                          
                                         )
                                       : const Center(
                                           child: Text("No Image Selected")),
@@ -265,23 +295,28 @@ class AddProduct extends StatelessWidget {
                               ],
                             ),
                             SizedBox(height: screenHeight * 0.02),
-                            
                             SizedBox(
                               height: screenHeight * 0.1,
                               child: CarouselView(
                                 scrollDirection: Axis.horizontal,
                                 itemExtent: screenWidth * 0.06,
                                 children: List.generate(
-                                  imagesLength, (int index) {
-                                  return Container(color: Colors.white,
-                                  child: productShoe.pickedImages != null &&
-                                          productShoe.pickedImages!.isNotEmpty
-                                      ? Image.memory(
-                                          productShoe.pickedImages![index],
-                                        )
-                                      : const Center(
-                                          child: Text("No Image Selected")),);
-                                }),
+                                  productShoe.pickedImages?.length ?? 0,
+                                  (int index) {
+                                    return Container(
+                                      color: Colors.white,
+                                      child: productShoe.pickedImages != null &&
+                                              productShoe
+                                                  .pickedImages!.isNotEmpty
+                                          ? Image.memory(
+                                              productShoe.pickedImages![index],
+                                            )
+                                          : const Center(
+                                              child: Text("No Image Selected"),
+                                            ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.07),
@@ -298,7 +333,7 @@ class AddProduct extends StatelessWidget {
                               color: Colors.grey,
                             ),
                             SizedBox(height: screenHeight * 0.02),
-                            DropDownWidget(),
+                            const DropDownWidget(),
                           ],
                         ),
                       ),
@@ -309,7 +344,7 @@ class AddProduct extends StatelessWidget {
             ),
           ),
         ),
-      );
-    
+      ),
+    );
   }
 }

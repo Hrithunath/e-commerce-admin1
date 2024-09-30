@@ -1,8 +1,8 @@
 import 'package:e_commerce_admin/firebase_options.dart';
-import 'package:e_commerce_admin/provider/category.dart';
-import 'package:e_commerce_admin/provider/product.dart';
-import 'package:e_commerce_admin/provider/sidebar.dart';
-import 'package:e_commerce_admin/provider/size.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
+import 'package:e_commerce_admin/view_model/provider/sidebar.dart';
+import 'package:e_commerce_admin/view_model/provider/size.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/drawer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
+    return   MaterialApp(
       debugShowCheckedModeBanner: false,
-     home: Sidebar()  
+     home: SideBar()  
       );
   }
   

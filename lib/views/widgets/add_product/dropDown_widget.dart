@@ -1,7 +1,7 @@
-import 'package:e_commerce_admin/provider/category.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:e_commerce_admin/view_models/catergoryshoe.dart'; // Make sure to import your CategoryShoe model
+import 'package:e_commerce_admin/model/catergoryshoe.dart'; // Make sure to import your CategoryShoe model
 
 class DropDownWidget extends StatelessWidget {
   const DropDownWidget({

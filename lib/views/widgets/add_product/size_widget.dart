@@ -1,5 +1,5 @@
 
-import 'package:e_commerce_admin/provider/size.dart';
+import 'package:e_commerce_admin/view_model/provider/size.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

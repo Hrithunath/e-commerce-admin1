@@ -1,98 +1,103 @@
-import 'package:e_commerce_admin/provider/sidebar.dart';
-import 'package:e_commerce_admin/views/screens/addProduct.dart';
-import 'package:e_commerce_admin/views/screens/addcategory.dart';
-import 'package:e_commerce_admin/views/screens/banner.dart';
-import 'package:e_commerce_admin/views/screens/product.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/addProduct.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/addcategory.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/banner.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:easy_sidemenu/easy_sidemenu.dart';
 
+class SideBar extends StatefulWidget {
+  @override
+  _SideBarState createState() => _SideBarState();
+}
 
-class Sidebar extends StatelessWidget {
-  const Sidebar({super.key});
+class _SideBarState extends State<SideBar> {
+  SideMenuController sideMenuController = SideMenuController();
+  PageController pageController = PageController();
+
+  @override
+  void dispose() {
+    sideMenuController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final sidebarProvider = Provider.of<SidebarProvider>(context);
-
     return Scaffold(
-     
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: const Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              title: const Text('Dashboard'),
-              onTap: () {
-                sidebarProvider.selectIndex(0);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: const Text('Users'),
-              onTap: () {
-                sidebarProvider.selectIndex(1);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: const Text('Products'),
-              onTap: () {
-                sidebarProvider.selectIndex(2);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: const Text('Orders'),
-              onTap: () {
-                sidebarProvider.selectIndex(3);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: const Text('Category'),
-              onTap: () {
-                sidebarProvider.selectIndex(4);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: const Text('Upload Product'),
-              onTap: () {
-                sidebarProvider.selectIndex(5);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              title: const Text('Upload Banner'),
-              onTap: () {
-                sidebarProvider.selectIndex(6);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      ),
-      body: IndexedStack(
-        index: sidebarProvider.selectedIndex,
+      body: Row(
         children: [
-          
-           ProductList(),
-          
-           AddCategory(),
-          AddProduct(),
-           AdminBanner()
+          SideMenu(
+            controller: sideMenuController,
+            style: SideMenuStyle(
+              displayMode: SideMenuDisplayMode.open,
+              hoverColor: Colors.blue[100],
+              selectedColor: Colors.blue,
+              selectedTitleTextStyle: 
+              const TextStyle(color: Colors.white),
+              selectedIconColor: Colors.white,
+              unselectedTitleTextStyle: 
+              const TextStyle(color: Colors.black),
+              unselectedIconColor: Colors.black,
+            ),
+            title: const Column(
+              children: [
+                SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    'Admin',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            items: [
+              SideMenuItem(
+                title: 'Upload Product',
+                icon: const Icon(Icons.upload_rounded),
+                onTap: (index, _) {
+                  pageController.jumpToPage(0);
+                  sideMenuController.changePage(0);
+                },
+              ),
+              SideMenuItem(
+                title: 'Product ',
+                icon: const Icon(Icons.shop_rounded),
+                onTap: (index, _) {
+                  pageController.jumpToPage(1);
+                },
+              ),
+              SideMenuItem(
+                title: 'Category',
+                icon: const Icon(Icons.category_sharp),
+                onTap: (index, _) {
+                  pageController.jumpToPage(2);
+                  sideMenuController.changePage(2);
+                },
+              ),
+              SideMenuItem(
+                title: 'Banner',
+                icon: const Icon(Icons.photo_size_select_actual_rounded),
+                onTap: (index, _) {
+                  pageController.jumpToPage(3);
+                  sideMenuController.changePage(3);
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (index) {
+                sideMenuController.changePage(index);
+              },
+              children: [
+                AddProduct(),
+                const ProductList(),
+                AddCategory(),
+                const AdminBanner(),
+              ],
+            ),
+          ),
         ],
       ),
     );

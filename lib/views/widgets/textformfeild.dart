@@ -12,6 +12,7 @@ class Textformfeildcustom extends StatelessWidget {
   IconData? sufixIcon;
   final double? height;
   final double? width;
+  int? maxLines;
 
   Textformfeildcustom({
     required this.label,
@@ -25,6 +26,7 @@ class Textformfeildcustom extends StatelessWidget {
     this.width,
     this.backgroundcolor = Colors.white,
     this.obscureText = false,
+    this.maxLines = 1
 
   });
 
@@ -33,11 +35,13 @@ class Textformfeildcustom extends StatelessWidget {
     return Container(
       height: height,
       width: width,
+    
        color: backgroundcolor, 
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
         autovalidateMode: AutovalidateMode.onUserInteraction,
+        maxLines: maxLines,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 235, 233, 233))),
