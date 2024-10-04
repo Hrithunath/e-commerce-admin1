@@ -3,9 +3,8 @@ import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/sidebar.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
-import 'package:e_commerce_admin/views/screens/sidebar_screen/addcategory.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/drawer.dart';
-import 'package:e_commerce_admin/views/screens/sidebar_screen/editcategory.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return   MaterialApp(
       debugShowCheckedModeBanner: false,
-     home: AddCategory()
+     home: SideBar()
       );
   }
   

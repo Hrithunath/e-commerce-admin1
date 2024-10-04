@@ -159,95 +159,112 @@ class AddCategory extends StatelessWidget {
                                     TextEditingController(
                                   text: category.categoryName,
                                 );
-                                  
+
                                 showModalBottomSheet(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                    return Consumer<CategoryShoe>(
+                                      builder: (context, categoryShoe, child) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize
+                                                .min, // Use min size to avoid overflow
                                             children: [
-                                              Container(
-                                                height: 200,
-                                                width: 400,
-                                                color: Colors.grey,
-                                                child: categoryShoe
-                                                            .pickedImage !=
-                                                        null
-                                                    ? Image.memory(
-                                                        categoryShoe
-                                                            .pickedImage!,
-                                                        height: 300,
-                                                        width: 300,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : category
-                                                            .imageUrl.isNotEmpty
-                                                        ? Image.network(
-                                                            category.imageUrl,
-                                                            height: 300,
-                                                            width: 300,
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    height: 200,
+                                                    width: 400,
+                                                    color: Colors.grey,
+                                                    child: categoryShoe
+                                                                .pickedImage !=
+                                                            null
+                                                        ? Image.memory(
+                                                            categoryShoe
+                                                                .pickedImage!,
+                                                            height:
+                                                                200, 
+                                                            width:
+                                                                400, 
                                                             fit: BoxFit.cover,
                                                           )
-                                                        : Center(
-                                                            child: Text(
-                                                                "No Image Selected"),
-                                                          ),
+                                                        : category.imageUrl
+                                                                .isNotEmpty
+                                                            ? Image.network(
+                                                                category
+                                                                    .imageUrl,
+                                                                height:
+                                                                    200, 
+                                                                width:
+                                                                    400, 
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
+                                                            : Center(
+                                                                child: Text(
+                                                                    "No Image Selected"),
+                                                              ),
+                                                  ),
+                                                  IconButton(
+                                                    onPressed: () async {
+                                                      
+                                                      await categoryShoe
+                                                          .pickImage();
+                                                    },
+                                                    icon: Icon(Icons.add),
+                                                  ),
+                                                ],
                                               ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  categoryShoe.pickImage();
+                                              SizedBox(height: 10),
+                                              Textformfeildcustom(
+                                                label: "Edit Category Name",
+                                                controller:
+                                                    editCategoryController,
+                                                validator: (value) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
+                                                    return "Category is required";
+                                                  }
+                                                  return null;
                                                 },
-                                                icon: Icon(Icons.add),
+                                              ),
+                                              SizedBox(height: 20),
+                                              ButtonCustomized(
+                                                text: "Update",
+                                                onPressed: () async {
+                                                  if (formkey.currentState!
+                                                      .validate()) {
+                                                    final updatedImageUrl =
+                                                        categoryShoe.pickedImage !=
+                                                                null
+                                                            ? await categoryShoe
+                                                                .uploadImage()
+                                                            : category.imageUrl;
+
+                                                    final updatedCategory =
+                                                        CategoryModel(
+                                                      categoryName:
+                                                          editCategoryController
+                                                              .text,
+                                                      imageUrl: updatedImageUrl,
+                                                      id: category.id,
+                                                    );
+
+                                                    await categoryShoe
+                                                        .editCategory(
+                                                            updatedCategory);
+                                                    categoryShoe
+                                                        .clearPickedImage();
+                                                    Navigator.pop(
+                                                        context); 
+                                                  }
+                                                },
                                               ),
                                             ],
                                           ),
-                                          SizedBox(height: 10),
-                                          Textformfeildcustom(
-                                            label: "Edit Category Name",
-                                            controller: editCategoryController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Category is required";
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                          SizedBox(height: 20),
-                                          ButtonCustomized(
-                                            text: "Update",
-                                            onPressed: () async {
-                                              if (formkey.currentState!
-                                                  .validate()) {
-                                                final updatedImageUrl =
-                                                    categoryShoe.pickedImage !=
-                                                            null
-                                                        ? await categoryShoe
-                                                            .uploadImage()
-                                                        : category.imageUrl;
-
-                                                final updatedCategory =
-                                                    CategoryModel(
-                                                  categoryName:
-                                                      editCategoryController
-                                                          .text,
-                                                  imageUrl: updatedImageUrl,
-                                                  id: category.id,
-                                                );
-
-                                                await categoryShoe.editCategory(
-                                                    updatedCategory);
-                                                categoryShoe.clearPickedImage();
-                                                Navigator.pop(
-                                                    context); // Close the modal after updating
-                                              }
-                                            },
-                                          ),
-                                        ],
-                                      ),
+                                        );
+                                      },
                                     );
                                   },
                                 );

@@ -1,3 +1,4 @@
+import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/editProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class ProductList extends StatelessWidget {
         () => Provider.of<ProductShoe>(context, listen: false).fetchProducts());
 
     final categoryShoe = Provider.of<CategoryShoe>(context);
+    final Sizes = Provider.of<SizeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,6 +58,7 @@ class ProductList extends StatelessWidget {
                                   TextCustom(text: "Image"),
                                   TextCustom(text: "Product Name"),
                                   TextCustom(text: "Category"),
+                                  TextCustom(text: "sizes"),
                                   TextCustom(text: "Stock"),
                                   TextCustom(text: "Price"),
                                   TextCustom(text: "Actions"),
@@ -82,7 +85,7 @@ class ProductList extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final product = productShoe.products[index];
                                   final category =
-                                      categoryShoe.categories.isNotEmpty
+                                       index < categoryShoe.categories.length
                                           ? categoryShoe.categories[index]
                                           : null;
 
@@ -140,6 +143,8 @@ class ProductList extends StatelessWidget {
                                           TextCustom(
                                               text: category?.categoryName ??
                                                   "No Category"),
+                                                    TextCustom(text: product.sizes.toString()),
+                                                  
                                           TextCustom(
                                               text: product.stock.toString()),
                                           TextCustom(

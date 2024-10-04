@@ -1,3 +1,4 @@
+import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
@@ -6,6 +7,7 @@ import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +23,8 @@ class AddProduct extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final productShoe = Provider.of<ProductShoe>(context);
+    final categoryShoe = Provider.of<CategoryShoe>(context);
+     final sizeProvider = Provider.of<SizeProvider>(context);
     final formkey = GlobalKey<FormState>();
 
     return Scaffold(
@@ -214,11 +218,12 @@ class AddProduct extends StatelessWidget {
                                 price: price!,
                                 
                                 stock: stock,
-                                category: "category",
+                                category:"category",
                                 isNewArrival: productShoe.isNewArrival,
                                 isTopCollection: productShoe.isTopCollection,
                               );
-                              print("price${price}");
+                              print("sizes:${selectedSizes}");
+                              
                               // Clear all fields and selections
                               productNameController.clear();
                               productDescriptionController.clear();
