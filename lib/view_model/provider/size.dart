@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class SizeProvider extends ChangeNotifier {
-  final List<String>selectedSize=[];
+   List<String>selectedSize=[];
 
 
   void selectionSize(String size){

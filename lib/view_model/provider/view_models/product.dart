@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_admin/model/product.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/editProduct.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -46,11 +47,14 @@ class ProductShoe extends ChangeNotifier {
           isTopCollection: isTopCollection,
         );
           
-        await FirebaseFirestore.instance
+        final result =await FirebaseFirestore.instance
             .collection("products")
             .add(product.toJson());
         products.add(product);
+        await FirebaseFirestore.instance.collection("products").doc(result.id)
+        .update({"id": result.id});
         notifyListeners();
+        print(result.id);
       }
     } catch (e) {
       print("Error adding product: $e");
@@ -91,6 +95,35 @@ class ProductShoe extends ChangeNotifier {
     } catch (e) {
       print("Error uploading image: $e");
       return '';
+    }
+  }
+
+   Future<void> deleteproduct(String id) async {
+    try {
+       await FirebaseFirestore.instance
+       .collection('products').doc().delete();
+      products.removeWhere((product) => product.id == id);
+      notifyListeners();
+    } catch (e) {
+      print("Error deleting Products: $e");
+    }
+  }
+
+
+  Future<void> EditProduct(ProductModel updatedProduct) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(updatedProduct.id)
+          .update(updatedProduct.toJson());
+
+      int index = products.indexWhere((product) => product.id == updatedProduct.id);
+      if (index != -1) {
+        products[index] = updatedProduct;
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error updating Product: $e");
     }
   }
 

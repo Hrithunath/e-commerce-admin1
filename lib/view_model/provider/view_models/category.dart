@@ -30,9 +30,14 @@ class CategoryShoe extends ChangeNotifier {
           id: generateRandomId(), 
         );
 
-        await FirebaseFirestore.instance.collection("categories").add(category.toJson());
+       final result = await FirebaseFirestore.instance
+       .collection("categories").add(category.toJson());
         categories.add(category);
+         await FirebaseFirestore.instance.collection("categories")
+         .doc(result.id)
+        .update({"id": result.id});
         notifyListeners();
+        print(result.id);
       }
 
       
@@ -98,15 +103,17 @@ class CategoryShoe extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteCategory(String categoryId) async {
+  Future<void> deleteCategory(String id) async {
     try {
-      await FirebaseFirestore.instance.collection('categories').doc(categoryId).delete();
-      categories.removeWhere((category) => category.id == categoryId);
+       await FirebaseFirestore.instance
+       .collection('categories').doc().delete();
+      categories.removeWhere((categories) => categories.id == id);
       notifyListeners();
     } catch (e) {
-      print("Error deleting Category: $e");
+      print("Error deleting Products: $e");
     }
   }
+
 
   void setCategory(String Category){
     selectedCategory = Category;

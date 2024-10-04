@@ -151,7 +151,10 @@ class AddCategory extends StatelessWidget {
                                 onPressed: () {},
                                 color: const Color.fromARGB(255, 192, 42, 219),
                               ),
-                              ButtonCustomized(text: "Delete", onPressed: () {}),
+                              ButtonCustomized(text: "Delete", onPressed: () {
+                                  Provider.of<CategoryShoe>(context, listen: false)
+                                  .deleteCategory(category.id);
+                              }),
                             ],
                           ),
                         ),
