@@ -1,13 +1,15 @@
+import 'package:e_commerce_admin/utils/validator/validator.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
-import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/drawer.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/price.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/stock.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +26,7 @@ class AddProduct extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final productShoe = Provider.of<ProductShoe>(context);
     final categoryShoe = Provider.of<CategoryShoe>(context);
-     final sizeProvider = Provider.of<SizeProvider>(context);
+    final sizeProvider = Provider.of<SizeProvider>(context);
     final formkey = GlobalKey<FormState>();
 
     return Scaffold(
@@ -75,12 +77,7 @@ class AddProduct extends StatelessWidget {
                                 backgroundcolor: Colors.white,
                                 controller: productNameController,
                                 keyboardType: TextInputType.name,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please provide the Product Name.';
-                                  }
-                                  return null;
-                                },
+                                  validator: (value) => Validator.validateProductName(value),
                               ),
                               SizedBox(height: screenHeight * 0.02),
                               TextCustom(
@@ -95,12 +92,7 @@ class AddProduct extends StatelessWidget {
                                 backgroundcolor: Colors.white,
                                 controller: productDescriptionController,
                                 keyboardType: TextInputType.text,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please provide the Product Description.';
-                                  }
-                                  return null;
-                                },
+                                  validator: (value) => Validator.validateProductDescription(value)
                               ),
                               SizedBox(height: screenHeight * 0.02),
                               TextCustom(
@@ -122,53 +114,9 @@ class AddProduct extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextCustom(text: "Price", fontSize: 17),
-                                        SizedBox(height: screenHeight * 0.01),
-                                        Textformfeildcustom(
-                                          label: "",
-                                          backgroundcolor: Colors.white,
-                                          controller: priceController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please provide the Price ';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  Price(screenHeight: screenHeight, priceController: priceController),
                                   SizedBox(width: screenWidth * 0.05),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextCustom(text: "Stock", fontSize: 17),
-                                        SizedBox(height: screenHeight * 0.01),
-                                        Textformfeildcustom(
-                                          label: "",
-                                          backgroundcolor: Colors.white,
-                                          controller: stockController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please provide the stock ';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  Stock(screenHeight: screenHeight, stockController: stockController),
                                 ],
                               ),
                               // New Arrival
@@ -194,62 +142,102 @@ class AddProduct extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight * 0.02),
                       Center(
-                        child: ButtonCustomized(
-                          text: "Add Product",
-                          height: screenHeight * 0.05,
-                          color: const Color.fromARGB(255, 192, 42, 219),
-                          onPressed: () {
-                            if (formkey.currentState!.validate()) {
-                              final selectedSizes = Provider.of<SizeProvider>(
-                                      context,
-                                      listen: false)
-                                  .selectedSize;
+                          child: ButtonCustomized(
+                              text: "Add Product",
+                              height: screenHeight * 0.05,
+                              color: const Color.fromARGB(255, 192, 42, 219),
+                              onPressed: () {
+                                // Validate the form fields first
+                                if (formkey.currentState!.validate()) {
+                                  // Check if sizes are selected
+                                  final selectedSizes =
+                                      Provider.of<SizeProvider>(context,
+                                              listen: false)
+                                          .selectedSize;
+                                  if (selectedSizes.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Please select at least one size."),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return; // Exit early if validation fails
+                                  }
 
-                              final double? price =
-                                  double.tryParse(priceController.text);
-                              final int stock =
-                                  int.tryParse(stockController.text) ?? 0;
+                                  // Check if at least one image is uploaded
+                                  if (productShoe.pickedImages == null ||
+                                      productShoe.pickedImages!.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Please upload at least one image."),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return; // Exit early if validation fails
+                                  }
 
-                              productShoe.createProduct(
-                                productName: productNameController.text,
-                                productDescription:
-                                  productDescriptionController.text,
-                                sizes: selectedSizes,
-                                price: price!,
-                                
-                                stock: stock,
-                                category:"category",
-                                isNewArrival: productShoe.isNewArrival,
-                                isTopCollection: productShoe.isTopCollection,
-                              );
-                              print("sizes:${selectedSizes}");
-                              
-                              // Clear all fields and selections
-                              productNameController.clear();
-                              productDescriptionController.clear();
-                              priceController.clear();
-                              stockController.clear();
-                              Provider.of<SizeProvider>(context, listen: false)
-                                  .clearSize();
-                              productShoe.clearPickedImages();
-                              productShoe.resetCheckboxes();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Product added successfully!'),
-                                ),
-                              );
+                                  // Check if a category is selected
+                                  if (categoryShoe.selectedCategory == null ||
+                                      categoryShoe.selectedCategory ==
+                                          'Unknown') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Please select a category."),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return; // Exit early if validation fails
+                                  }
 
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const ProductList(),
-                                ),
-                              );
-                            } else {
-                              print("Form is not valid");
-                            }
-                          },
-                        ),
-                      ),
+                                  // If all validations pass, proceed to create the product
+                                  final copiedSizes = List<String>.from(
+                                      selectedSizes); // Ensure you use selected sizes here
+                                  final double? price =
+                                      double.tryParse(priceController.text);
+                                  final int stock =
+                                      int.tryParse(stockController.text) ?? 0;
+
+                                  productShoe.createProduct(
+                                    productName: productNameController.text,
+                                    productDescription:
+                                        productDescriptionController.text,
+                                    sizes: copiedSizes,
+                                    price: price!,
+                                    stock: stock,
+                                    category: categoryShoe.selectedCategory ??
+                                        'Unknown',
+                                    isNewArrival: productShoe.isNewArrival,
+                                    isTopCollection:
+                                        productShoe.isTopCollection,
+                                  );
+
+                                  // Clear all fields and selections
+                                  productNameController.clear();
+                                  productDescriptionController.clear();
+                                  priceController.clear();
+                                  stockController.clear();
+                                  Provider.of<SizeProvider>(context,
+                                          listen: false)
+                                      .clearSize();
+                                  productShoe.clearPickedImages();
+                                  productShoe.resetCheckboxes();
+                                  categoryShoe.clearCategory();
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Product added successfully!'),
+                                          backgroundColor: Colors.green,
+                                    ),
+                                  );
+
+                                  pageController.jumpToPage(1);
+                                }
+                              })
+                              ),
                     ],
                   ),
                 ),

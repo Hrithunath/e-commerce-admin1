@@ -5,15 +5,18 @@ import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 
+
+
+
 class SideBar extends StatefulWidget {
   @override
   _SideBarState createState() => _SideBarState();
 }
-
+    PageController pageController = PageController();
+    
 class _SideBarState extends State<SideBar> {
   SideMenuController sideMenuController = SideMenuController();
-  PageController pageController = PageController();
-
+ 
   @override
   void dispose() {
     sideMenuController.dispose();
@@ -64,6 +67,7 @@ class _SideBarState extends State<SideBar> {
                 icon: const Icon(Icons.shop_rounded),
                 onTap: (index, _) {
                   pageController.jumpToPage(1);
+                  sideMenuController.changePage(1);
                 },
               ),
               SideMenuItem(
@@ -103,3 +107,4 @@ class _SideBarState extends State<SideBar> {
     );
   }
 }
+

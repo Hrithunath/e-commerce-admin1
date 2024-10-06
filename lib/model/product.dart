@@ -1,8 +1,9 @@
+
 class ProductModel {
   final String id; 
   final String productName;
   final String productDescription;
-  final List<String> sizes; 
+  final List<String> sizes;
   final double price;
   final int stock;
   final List<String> uploadImages; 
@@ -11,7 +12,7 @@ class ProductModel {
   final bool isTopCollection;   
 
   ProductModel({
-    required this.id, 
+    required this.id,
     required this.productName,
     required this.productDescription,
     required this.sizes,
@@ -26,7 +27,7 @@ class ProductModel {
   
   Map<String, dynamic> toJson() {
     return {
-      'id': id, 
+      'id': id,
       'productName': productName,
       'productDescription': productDescription,
       'sizes': sizes,
@@ -39,17 +40,18 @@ class ProductModel {
     };
   }
 
+  
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'], // Fetching the id
+      id: json['id'],
       productName: json['productName'],
       productDescription: json['productDescription'],
       sizes: List<String>.from(json['sizes'] ?? []),
       price: json['price'],
       stock: json['stock'],
       uploadImages: List<String>.from(json['uploadImages'] ?? []),
-      category: json['category'],
-      isNewArrival: json['isNewArrival'] ?? false, 
+      category: json['category'] ?? '', 
+      isNewArrival: json['isNewArrival'] ?? false,
       isTopCollection: json['isTopCollection'] ?? false,
     );
   }

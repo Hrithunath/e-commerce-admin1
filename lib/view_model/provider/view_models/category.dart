@@ -10,40 +10,37 @@ class CategoryShoe extends ChangeNotifier {
   Uint8List? pickedImage;
   String? selectedCategory;
 
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
   CategoryShoe() {
     fetchCategories();
   }
 
-  final FirebaseStorage storage = FirebaseStorage.instance;
-
   Future<void> createCategory(String categoryName) async {
     try {
       if (pickedImage != null) {
-        String imageUrl = await uploadImage();
+        String imageUrl = await uploadImage(); // Call the uploadImage method here
 
         if (imageUrl.isNotEmpty) {
           final category = CategoryModel(
             categoryName: categoryName,
             imageUrl: imageUrl,
-            id: "", 
+            id: "",
           );
 
-         
           final result = await FirebaseFirestore.instance
               .collection("categories")
               .add(category.toJson());
 
-         
+          print("Created Category: ${category.toJson()}");
           category.id = result.id;
 
-          
           await FirebaseFirestore.instance.collection("categories")
               .doc(result.id)
               .update({"id": result.id});
 
-          
           categories.add(category);
-          notifyListeners(); 
+          notifyListeners();
           print("Category added with ID: ${result.id}");
         }
       }
@@ -55,14 +52,25 @@ class CategoryShoe extends ChangeNotifier {
   Future<void> fetchCategories() async {
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('categories').get();
-      categories = snapshot.docs.map((doc) => CategoryModel.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      categories = snapshot.docs.map((doc) {
+        final category = CategoryModel.fromJson(doc.data() as Map<String, dynamic>);
+        print("Fetched Category: ${category.id}, Name: ${category.categoryName}");
+        return category;
+      }).toList();
+
+      print("All Fetched Categories: $categories"); // This will print the entire list of fetched categories
       notifyListeners();
     } catch (e) {
       print("Error fetching categories: $e");
     }
   }
 
-  Future<void> pickImage() async {
+  void selectCategory(String categoryId) {
+    selectedCategory = categoryId;
+    notifyListeners();
+  }
+
+  Future<void> pickImage() async { // Ensure this is at the class level
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
     );
@@ -100,12 +108,8 @@ class CategoryShoe extends ChangeNotifier {
       int index = categories.indexWhere((category) => category.id == updatedCategory.id);
       if (index != -1) {
         categories[index] = updatedCategory;
-       
       }
-       
-    } 
-    
-    catch (e) {
+    } catch (e) {
       print("Error updating Category: $e");
     }
     notifyListeners();
@@ -114,9 +118,9 @@ class CategoryShoe extends ChangeNotifier {
   Future<void> deleteCategory(String id) async {
     try {
       await FirebaseFirestore.instance
-          .collection('categories').doc(id).delete(); 
+          .collection('categories').doc(id).delete();
       categories.removeWhere((category) => category.id == id);
-      notifyListeners(); 
+      notifyListeners();
     } catch (e) {
       print("Error deleting Category: $e");
     }
@@ -124,11 +128,17 @@ class CategoryShoe extends ChangeNotifier {
 
   void setCategory(String category) {
     selectedCategory = category;
+    print("Selected category: $selectedCategory");
     notifyListeners();
   }
 
   void clearPickedImage() {
     pickedImage = null;
+    notifyListeners();
+  }
+
+  void clearCategory() {
+    selectedCategory = null; 
     notifyListeners();
   }
 }

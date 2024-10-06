@@ -1,27 +1,64 @@
+import 'dart:io';
+
 import 'package:e_commerce_admin/model/product.dart';
-import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
-import 'package:e_commerce_admin/views/widgets/button.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
+import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EditProduct extends StatelessWidget {
-  EditProduct({super.key, required ProductModel product});
+class EditProduct extends StatefulWidget {
+  final String productId;
+
+  EditProduct({super.key, required this.productId});
+
+  @override
+  _EditProductState createState() => _EditProductState();
+}
+
+class _EditProductState extends State<EditProduct> {
+  late final ProductModel product;
+  late final CategoryShoe categoryShoe;
   final productNameController = TextEditingController();
   final productDescriptionController = TextEditingController();
   final priceController = TextEditingController();
   final stockController = TextEditingController();
+
+@override
+void initState() {
+  super.initState();
+  // Fetch the product here
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final productShoe = Provider.of<ProductShoe>(context, listen: false);
+    product = productShoe.getProductById(widget.productId); 
+
+    // Now set the controller texts
+    productNameController.text = product.productName;
+    productDescriptionController.text = product.productDescription;
+    priceController.text = product.price.toString();
+    stockController.text = product.stock.toString();
+
+    // Set selected size and category
+    Provider.of<SizeProvider>(context, listen: false).setSelectedSize(product.sizes);
+   final cat =  Provider.of<CategoryShoe>(context, listen: false).setCategory(product.category);
+  
+  });
+}
+
+
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final productShoe = Provider.of<ProductShoe>(context);
-    final formkey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Padding(
@@ -29,7 +66,7 @@ class EditProduct extends StatelessWidget {
             horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
         child: SingleChildScrollView(
           child: Form(
-            key: formkey,
+            key: formKey,
             child: Row(
               children: [
                 Expanded(
@@ -37,11 +74,12 @@ class EditProduct extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                          child: TextCustom(
-                        text: "Upload Product",
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      )),
+                        child: TextCustom(
+                          text: "Edit Product",
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Container(
                         width: screenWidth * 0.9,
                         decoration: const BoxDecoration(
@@ -60,6 +98,7 @@ class EditProduct extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
+                              // Product Name Field
                               TextCustom(
                                 text: "Product Name",
                                 color: const Color.fromARGB(255, 112, 111, 111),
@@ -79,6 +118,7 @@ class EditProduct extends StatelessWidget {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
+                              // Product Description Field
                               TextCustom(
                                 text: "Product Description",
                                 color: const Color.fromARGB(255, 112, 111, 111),
@@ -99,6 +139,7 @@ class EditProduct extends StatelessWidget {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
+                              // Size Selection
                               TextCustom(
                                 text: "Size",
                                 color: const Color.fromARGB(255, 112, 111, 111),
@@ -108,6 +149,7 @@ class EditProduct extends StatelessWidget {
                               SizedBox(height: screenHeight * 0.02),
                               SizeSelectionWidget(),
                               SizedBox(height: screenHeight * 0.02),
+                              // Price and Stock Section
                               TextCustom(
                                 text: "Price and Stock",
                                 fontSize: 19,
@@ -118,6 +160,7 @@ class EditProduct extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  // Price Field
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -133,7 +176,11 @@ class EditProduct extends StatelessWidget {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please provide the Price ';
+                                              return 'Please provide the Price.';
+                                            } else if (double.tryParse(value) ==
+                                                    null ||
+                                                double.parse(value) <= 0) {
+                                              return 'Please provide a valid positive number for Price.';
                                             }
                                             return null;
                                           },
@@ -142,6 +189,7 @@ class EditProduct extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: screenWidth * 0.05),
+                                  // Stock Field
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -157,7 +205,11 @@ class EditProduct extends StatelessWidget {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please provide the stock ';
+                                              return 'Please provide the stock.';
+                                            } else if (int.tryParse(value) ==
+                                                    null ||
+                                                int.parse(value) < 0) {
+                                              return 'Please provide a valid non-negative number for Stock.';
                                             }
                                             return null;
                                           },
@@ -167,7 +219,7 @@ class EditProduct extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              // New Arrival
+                              // New Arrival Checkbox
                               CheckboxListTile(
                                 title: const Text("New Arrival"),
                                 value: productShoe.isNewArrival,
@@ -175,8 +227,7 @@ class EditProduct extends StatelessWidget {
                                   productShoe.toggleNewArrival();
                                 },
                               ),
-
-                              // Top Collection
+                              // Top Collection Checkbox
                               CheckboxListTile(
                                 title: const Text("Top Collection"),
                                 value: productShoe.isTopCollection,
@@ -189,66 +240,98 @@ class EditProduct extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
+                      // Save Button
                       Center(
                         child: ButtonCustomized(
-                          text: "Save",
-                          height: screenHeight * 0.05,
-                          color: const Color.fromARGB(255, 192, 42, 219),
-                          onPressed: () {
-                            if (formkey.currentState!.validate()) {
-                              final selectedSizes = Provider.of<SizeProvider>(
-                                      context,
-                                      listen: false)
-                                  .selectedSize;
-
-                              final double? price =
-                                  double.tryParse(priceController.text);
-                              final int stock =
-                                  int.tryParse(stockController.text) ?? 0;
-
-                              productShoe.createProduct(
-                                productName: productNameController.text,
-                                productDescription:
-                                  productDescriptionController.text,
-                                sizes: selectedSizes,
-                                price: price!,
+                            text: "Save",
+                            height: screenHeight * 0.05,
+                            color: const Color.fromARGB(255, 192, 42, 219),
+                            onPressed: () async {
+                              if (formKey.currentState!.validate()) {
+                                // Check if the form is valid
+                                final selectedSizes = Provider.of<SizeProvider>(
+                                        context,
+                                        listen: false)
+                                    .selectedSize; // Get selected sizes
+                               Provider.of<CategoryShoe>(context, listen: false).setCategory(product.category);
                                 
-                                stock: stock,
-                                category: "category",
-                                isNewArrival: productShoe.isNewArrival,
-                                isTopCollection: productShoe.isTopCollection,
-                              );
-                              print("price${price}");
-                              // Clear all fields and selections
-                              productNameController.clear();
-                              productDescriptionController.clear();
-                              priceController.clear();
-                              stockController.clear();
-                              Provider.of<SizeProvider>(context, listen: false)
-                                  .clearSize();
-                              productShoe.clearPickedImages();
-                              productShoe.resetCheckboxes();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Product added successfully!'),
-                                ),
-                              );
+                                   if (selectedSizes.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Please select at least one size."),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return; // Exit early if validation fails
+                                  }
 
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const ProductList(),
-                                ),
-                              );
-                            } else {
-                              print("Form is not valid");
-                            }
-                          },
-                        ),
+                                  // Check if at least one image is uploaded
+                                  if (productShoe.pickedImages == null ||
+                                      productShoe.pickedImages!.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Please upload at least one image."),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return; // Exit early if validation fails
+                                  }
+
+                                  // Check if a category is selected
+                                  if (categoryShoe.selectedCategory == null ||
+                                      categoryShoe.selectedCategory ==
+                                          'Unknown') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Please select a category."),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return; // Exit early if validation fails
+                                  }
+
+                                final double? price = double.tryParse(
+                                    priceController.text); // Parse price
+                                final int stock =
+                                    int.tryParse(stockController.text) ??
+                                        0; // Parse stock
+
+                                try {
+                                  await productShoe.editProduct(
+                                    product, // Pass the product object you fetched earlier
+                                    productName: productNameController
+                                        .text, // Get updated name
+                                    description: productDescriptionController
+                                        .text, // Get updated description
+                                    price: price!, // Ensure price is not null
+                                    stock: stock, // Pass stock
+                                    selectedSizes:
+                                        selectedSizes, // Pass selected sizes
+                                    
+                                  );
+
+                                  // Clear fields after successful update
+                                  productNameController.clear();
+                                  productDescriptionController.clear();
+                                  priceController.clear();
+                                  stockController.clear();
+
+                                  // Navigate back or show a success message
+                                  Navigator.of(context).pop();
+                                } catch (error) {
+                                  print(
+                                      "Error updating product: $error"); // Print any errors
+                                }
+                              }
+                            }),
                       ),
                     ],
                   ),
                 ),
-                Expanded(
+                   Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.05,
@@ -299,14 +382,41 @@ class EditProduct extends StatelessWidget {
                               height: screenHeight * 0.1,
                               child: CarouselView(
                                 scrollDirection: Axis.horizontal,
-                                 itemExtent: screenWidth * 0.06,
-                                 children: 
-                                productShoe.pickedImages!
-                                    .map((e) => Image.memory(e))
-                                    .toList(),
-                          
+                                itemExtent: screenWidth * 0.06,
+                                children: List.generate(
+                                  productShoe.pickedImages?.length ?? 0,
+                                  (int index) {
+                                    return Container(
+                                      color: Colors.white,
+                                      child: productShoe.pickedImages != null &&
+                                              productShoe
+                                                  .pickedImages!.isNotEmpty
+                                          ? Image.memory(
+                                              productShoe.pickedImages![index],
+                                            )
+                                          : const Center(
+                                              child: Text("No Image Selected"),
+                                            ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
+                            SizedBox(height: screenHeight * 0.07),
+                            TextCustom(
+                              text: "Category",
+                              fontSize: 19,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            SizedBox(height: screenHeight * 0.02),
+                            TextCustom(
+                              text: "Product Category",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: screenHeight * 0.02),
+                            const DropDownWidget(),
                           ],
                         ),
                       ),
@@ -315,9 +425,10 @@ class EditProduct extends StatelessWidget {
                 )
               ],
             ),
+            
           ),
         ),
       ),
     );
   }
-}
+} 

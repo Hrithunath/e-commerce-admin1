@@ -1,5 +1,7 @@
+import 'package:e_commerce_admin/model/catergoryshoe.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/editProduct.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
@@ -84,103 +86,109 @@ class ProductList extends StatelessWidget {
                                 itemCount: productShoe.products.length,
                                 itemBuilder: (context, index) {
                                   final product = productShoe.products[index];
-                                  final category =
-                                       index < categoryShoe.categories.length
-                                          ? categoryShoe.categories[index]
-                                          : null;
+                                  // Find the category using the categoryId
+                        final category = categoryShoe.categories.firstWhere(
+                                    (cat) => cat.id == product.category,
+                                    orElse: () => CategoryModel(
+                                      id: 'default-id',
+                                      categoryName: 'Default Category',
+                                      imageUrl: '',
+                                    ),
+                                  );
 
-                                  return Table(
-                                    children: [
-                                      TableRow(
-                                        children: [
-                                          TextCustom(text: "${index + 1}"),
-                                          SizedBox(
-                                            height: 50,
-                                            width: 40,
-                                            child: Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: (product.uploadImages !=
-                                                          null &&
-                                                      product.uploadImages
-                                                          .isNotEmpty)
-                                                  ? Image.network(
-                                                      product.uploadImages[0],
-                                                      height:
-                                                          screenHeight * 0.05,
-                                                      width: screenWidth * 0.04,
-                                                      fit: BoxFit.cover,
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        return Container(
-                                                          height: screenHeight *
-                                                              0.05,
-                                                          width: screenWidth *
-                                                              0.04,
-                                                          color: Colors.red,
-                                                          child: const Center(
-                                                            child: Icon(
-                                                                Icons.error,
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        );
-                                                      },
-                                                    )
-                                                  : Container(
-                                                      height:
-                                                          screenHeight * 0.05,
-                                                      width: screenWidth * 0.04,
-                                                      color: Colors.amber,
-                                                      child: const Center(
-                                                        child: Icon(Icons.image,
-                                                            color:
-                                                                Colors.white),
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Table(
+                                      
+                                      children: [
+                                        TableRow(
+                                          children: [
+                                            TextCustom(text: "${index + 1}"),
+                                            SizedBox(
+                                              height: 50,
+                                              width: 40,
+                                              child: Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: (product.uploadImages !=
+                                                            null &&
+                                                        product.uploadImages
+                                                            .isNotEmpty)
+                                                    ? Image.network(
+                                                        product.uploadImages[0],
+                                                        height:
+                                                            screenHeight * 0.05,
+                                                        width: screenWidth * 0.04,
+                                                        fit: BoxFit.cover,
+                                                        errorBuilder: (context,
+                                                            error, stackTrace) {
+                                                          return Container(
+                                                            height: screenHeight *
+                                                                0.05,
+                                                            width: screenWidth *
+                                                                0.04,
+                                                            color: Colors.red,
+                                                            child: const Center(
+                                                              child: Icon(
+                                                                  Icons.error,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : Container(
+                                                        height:
+                                                            screenHeight * 0.05,
+                                                        width: screenWidth * 0.04,
+                                                        color: Colors.amber,
+                                                        child: const Center(
+                                                          child: Icon(Icons.image,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
                                                       ),
-                                                    ),
+                                              ),
                                             ),
-                                          ),
-                                          TextCustom(text: product.productName),
-                                          TextCustom(
-                                              text: category?.categoryName ??
-                                                  "No Category"),
-                                                    TextCustom(text: product.sizes.toString()),
-                                                  
-                                          TextCustom(
-                                              text: product.stock.toString()),
-                                          TextCustom(
-                                              text:
-                                                  '₹${product.price.toString()}'),
-                                          Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          EditProduct(
-                                                        product: product,
+                                            TextCustom(text: product.productName),
+                                            TextCustom(
+                                                text: category?.categoryName ??
+                                                    "No Category"),
+                                                      TextCustom(text: product.sizes.join(',')),
+                                                    
+                                            TextCustom(
+                                                text: product.stock.toString()),
+                                            TextCustom(
+                                                text:
+                                                    '₹${product.price.toString()}'),
+                                            Row(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                           EditProduct(productId:product.id )
                                                       ),
-                                                    ),
-                                                  );
-                                                },
-                                                icon: Icon(Icons.edit),
-                                              ),
-                                              IconButton(
-                                                onPressed: () async{
-                                                  Provider.of<ProductShoe>(
-                                                          context,
-                                                          listen: false)
-                                                      .deleteproduct(
-                                                          product.id);
-                                                  
-                                                },
-                                                icon: Icon(Icons.delete),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                                                    );
+                                                  },
+                                                  icon: Icon(Icons.edit),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () async{
+                                                    Provider.of<ProductShoe>(
+                                                            context,
+                                                            listen: false)
+                                                        .deleteProduct(product.id);
+                                                    
+                                                  },
+                                                  icon: Icon(Icons.delete),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
                               );
