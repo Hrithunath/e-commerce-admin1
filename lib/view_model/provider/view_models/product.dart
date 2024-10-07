@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_admin/model/product.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -130,35 +131,56 @@ class ProductShoe extends ChangeNotifier {
       print("Error deleting product: $e");
     }
   }
-
-  Future<void> editProduct(ProductModel updatedProduct, {required List<String> selectedSizes, required int stock, required double price, required String description, required String productName}) async {
-    try {
-      final productIndex = products.indexWhere((product) => product.id == updatedProduct.id);
-      if (productIndex != -1) {
-        final updated = ProductModel(
-          id: updatedProduct.id,
-          productName: productName,
-          productDescription: description,
-          sizes: selectedSizes,
-          price: price,
-          stock: stock,
-          uploadImages: updatedProduct.uploadImages, 
-          category: updatedProduct.category,
-          isNewArrival: updatedProduct.isNewArrival,
-          isTopCollection: updatedProduct.isTopCollection,
-        );
-
-        await FirebaseFirestore.instance
-            .collection('products')
-            .doc(updated.id)
-            .update(updated.toJson());
-        products[productIndex] = updated;
-        notifyListeners(); 
-      }
-    } catch (e) {
-      print("Error updating product: $e");
-    }
+  
+  Future<void> editProduct(
+  ProductModel updatedProduct,
+  CategoryShoe categories,
+  {
+    required List<String> selectedSizes,
+    required int stock,
+    required double price,
+    required String description,
+    required String productName,
+    bool uploadNewImages = false, 
   }
+) async {
+  try {
+    final productIndex = products.indexWhere((product) => product.id == updatedProduct.id);
+    if (productIndex != -1) {
+      List<String> imageUrls = updatedProduct.uploadImages;
+
+      if (uploadNewImages && pickedImages != null && pickedImages!.isNotEmpty) {
+        List<String> newImageUrls = await uploadImages();
+        imageUrls.addAll(newImageUrls);
+      }
+
+      final updated = ProductModel(
+        id: updatedProduct.id,
+        productName: productName,
+        productDescription: description,
+        sizes: selectedSizes,
+        price: price,
+        stock: stock,
+        uploadImages: imageUrls,
+       category: categories.selectedCategory!,
+        isNewArrival: updatedProduct.isNewArrival,
+        isTopCollection: updatedProduct.isTopCollection,
+      );
+
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(updated.id)
+          .update(updated.toJson());
+
+      products[productIndex] = updated;
+      notifyListeners(); 
+    }
+  } catch (e) {
+    print("Error updating product: $e");
+  }
+}
+
+
 
    bool _isNewArrival = false;
   bool _isTopCollection = false;

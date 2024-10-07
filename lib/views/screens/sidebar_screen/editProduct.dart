@@ -8,6 +8,8 @@ import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
+import 'package:e_commerce_admin/views/widgets/scaffold_message.dart';
+
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,8 @@ void initState() {
 
     // Set selected size and category
     Provider.of<SizeProvider>(context, listen: false).setSelectedSize(product.sizes);
-   final cat =  Provider.of<CategoryShoe>(context, listen: false).setCategory(product.category);
+   Provider.of<CategoryShoe>(context, listen: false).setCategory(product.category);
+
   
   });
 }
@@ -247,86 +250,57 @@ void initState() {
                             height: screenHeight * 0.05,
                             color: const Color.fromARGB(255, 192, 42, 219),
                             onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                // Check if the form is valid
-                                final selectedSizes = Provider.of<SizeProvider>(
-                                        context,
-                                        listen: false)
-                                    .selectedSize; // Get selected sizes
-                               Provider.of<CategoryShoe>(context, listen: false).setCategory(product.category);
-                                
-                                   if (selectedSizes.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            "Please select at least one size."),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return; // Exit early if validation fails
-                                  }
+  if (formKey.currentState!.validate()) {
+    // Check if the form is valid
+   final selectedSizes = Provider.of<SizeProvider>(context, listen: false).selectedSize; 
+final categoryShoe = Provider.of<CategoryShoe>(context, listen: false); // No assignment
 
-                                  // Check if at least one image is uploaded
-                                  if (productShoe.pickedImages == null ||
-                                      productShoe.pickedImages!.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            "Please upload at least one image."),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return; // Exit early if validation fails
-                                  }
+    if (selectedSizes.isEmpty) {
+      showSnackBarMessage(context, "Please select at least one size.", backgroundColor: Colors.red);
+      return; 
+    }
 
-                                  // Check if a category is selected
-                                  if (categoryShoe.selectedCategory == null ||
-                                      categoryShoe.selectedCategory ==
-                                          'Unknown') {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text("Please select a category."),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return; // Exit early if validation fails
-                                  }
+    // // Check if at least one image is uploaded
+    // if (productShoe.pickedImages == null || productShoe.pickedImages!.isEmpty) {
+    //   showSnackBarMessage(context, "Please upload at least one image.", backgroundColor: Colors.red);
+    //   return; 
+    // }
 
-                                final double? price = double.tryParse(
-                                    priceController.text); // Parse price
-                                final int stock =
-                                    int.tryParse(stockController.text) ??
-                                        0; // Parse stock
+    // Check if a category is selected
+    if (categoryShoe.selectedCategory == null || categoryShoe.selectedCategory == 'Unknown') {
+      showSnackBarMessage(context, "Please select a category.", backgroundColor: Colors.red);
+      return; 
+    }
 
-                                try {
-                                  await productShoe.editProduct(
-                                    product, // Pass the product object you fetched earlier
-                                    productName: productNameController
-                                        .text, // Get updated name
-                                    description: productDescriptionController
-                                        .text, // Get updated description
-                                    price: price!, // Ensure price is not null
-                                    stock: stock, // Pass stock
-                                    selectedSizes:
-                                        selectedSizes, // Pass selected sizes
-                                    
-                                  );
+    final double? price = double.tryParse(priceController.text); 
+    final int stock = int.tryParse(stockController.text) ?? 0; 
 
-                                  // Clear fields after successful update
-                                  productNameController.clear();
-                                  productDescriptionController.clear();
-                                  priceController.clear();
-                                  stockController.clear();
+    try {
+      await productShoe.editProduct(
+        product,
+        categoryShoe,
+        productName: productNameController.text, 
+        description: productDescriptionController.text, 
+        price: price!,
+        stock: stock, 
+        selectedSizes: selectedSizes, 
+        uploadNewImages: true
+      );
 
-                                  // Navigate back or show a success message
-                                  Navigator.of(context).pop();
-                                } catch (error) {
-                                  print(
-                                      "Error updating product: $error"); // Print any errors
-                                }
-                              }
-                            }),
+      // Clear fields after successful update
+      productNameController.clear();
+      productDescriptionController.clear();
+      priceController.clear();
+      stockController.clear();
+
+      // Navigate back or show a success message
+      Navigator.of(context).pop();
+    } catch (error) {
+      print("Error updating product: $error");
+    }
+  }
+},
+),
                       ),
                     ],
                   ),

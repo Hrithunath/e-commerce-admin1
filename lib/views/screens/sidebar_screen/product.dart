@@ -1,6 +1,7 @@
 import 'package:e_commerce_admin/model/catergoryshoe.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/editProduct.dart';
+import 'package:e_commerce_admin/views/widgets/alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class ProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    
+
     Future.microtask(
         () => Provider.of<ProductShoe>(context, listen: false).fetchProducts());
 
@@ -87,7 +88,8 @@ class ProductList extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final product = productShoe.products[index];
                                   // Find the category using the categoryId
-                        final category = categoryShoe.categories.firstWhere(
+                                  final category =
+                                      categoryShoe.categories.firstWhere(
                                     (cat) => cat.id == product.category,
                                     orElse: () => CategoryModel(
                                       id: 'default-id',
@@ -99,7 +101,6 @@ class ProductList extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Table(
-                                      
                                       children: [
                                         TableRow(
                                           children: [
@@ -117,13 +118,15 @@ class ProductList extends StatelessWidget {
                                                         product.uploadImages[0],
                                                         height:
                                                             screenHeight * 0.05,
-                                                        width: screenWidth * 0.04,
+                                                        width:
+                                                            screenWidth * 0.04,
                                                         fit: BoxFit.cover,
                                                         errorBuilder: (context,
                                                             error, stackTrace) {
                                                           return Container(
-                                                            height: screenHeight *
-                                                                0.05,
+                                                            height:
+                                                                screenHeight *
+                                                                    0.05,
                                                             width: screenWidth *
                                                                 0.04,
                                                             color: Colors.red,
@@ -139,22 +142,25 @@ class ProductList extends StatelessWidget {
                                                     : Container(
                                                         height:
                                                             screenHeight * 0.05,
-                                                        width: screenWidth * 0.04,
+                                                        width:
+                                                            screenWidth * 0.04,
                                                         color: Colors.amber,
                                                         child: const Center(
-                                                          child: Icon(Icons.image,
+                                                          child: Icon(
+                                                              Icons.image,
                                                               color:
                                                                   Colors.white),
                                                         ),
                                                       ),
                                               ),
                                             ),
-                                            TextCustom(text: product.productName),
+                                            TextCustom(
+                                                text: product.productName),
                                             TextCustom(
                                                 text: category?.categoryName ??
                                                     "No Category"),
-                                                      TextCustom(text: product.sizes.join(',')),
-                                                    
+                                            TextCustom(
+                                                text: product.sizes.join(',')),
                                             TextCustom(
                                                 text: product.stock.toString()),
                                             TextCustom(
@@ -166,20 +172,28 @@ class ProductList extends StatelessWidget {
                                                   onPressed: () {
                                                     Navigator.of(context).push(
                                                       MaterialPageRoute(
-                                                        builder: (context) =>
-                                                           EditProduct(productId:product.id )
-                                                      ),
+                                                          builder: (context) =>
+                                                              EditProduct(
+                                                                  productId:
+                                                                      product
+                                                                          .id)),
                                                     );
                                                   },
                                                   icon: Icon(Icons.edit),
                                                 ),
                                                 IconButton(
-                                                  onPressed: () async{
-                                                    Provider.of<ProductShoe>(
+                                                  onPressed: () async {
+                                                    showAlertDialog(
+                                                        context,
+                                                        "Remove Product",
+                                                        "Do you want to delete this Product?",
+                                                        () =>  Provider.of<ProductShoe>(
                                                             context,
                                                             listen: false)
-                                                        .deleteProduct(product.id);
-                                                    
+                                                        .deleteProduct(
+                                                            product.id) 
+                                                        );
+                                                   
                                                   },
                                                   icon: Icon(Icons.delete),
                                                 ),

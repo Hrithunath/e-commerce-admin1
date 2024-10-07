@@ -8,6 +8,7 @@ import 'package:e_commerce_admin/views/widgets/add_product/price.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/stock.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
+import 'package:e_commerce_admin/views/widgets/scaffold_message.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
 import 'package:flutter/material.dart';
@@ -155,26 +156,14 @@ class AddProduct extends StatelessWidget {
                                               listen: false)
                                           .selectedSize;
                                   if (selectedSizes.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            "Please select at least one size."),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return; // Exit early if validation fails
+                                    showSnackBarMessage(context, "Please select at least one size.",backgroundColor: Colors.red);
+                                    return ; // Exit early if validation fails
                                   }
 
                                   // Check if at least one image is uploaded
                                   if (productShoe.pickedImages == null ||
                                       productShoe.pickedImages!.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            "Please upload at least one image."),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
+                                    showSnackBarMessage(context, "Please upload at least one image.",backgroundColor: Colors.red);
                                     return; // Exit early if validation fails
                                   }
 
@@ -182,13 +171,7 @@ class AddProduct extends StatelessWidget {
                                   if (categoryShoe.selectedCategory == null ||
                                       categoryShoe.selectedCategory ==
                                           'Unknown') {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text("Please select a category."),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
+                                    showSnackBarMessage(context, "Please select a category.",backgroundColor: Colors.red);
                                     return; // Exit early if validation fails
                                   }
 
@@ -226,13 +209,7 @@ class AddProduct extends StatelessWidget {
                                   productShoe.resetCheckboxes();
                                   categoryShoe.clearCategory();
 
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Product added successfully!'),
-                                          backgroundColor: Colors.green,
-                                    ),
-                                  );
+                                  showSnackBarMessage(context, 'Product added successfully!',backgroundColor: Colors.green);
 
                                   pageController.jumpToPage(1);
                                 }

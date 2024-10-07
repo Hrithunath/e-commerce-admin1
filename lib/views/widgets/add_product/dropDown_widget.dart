@@ -21,43 +21,40 @@ class _DropDownWidgetState extends State<DropDownWidget> {
       height: 50,
       width: 250,
       decoration: BoxDecoration(
-        color: Colors.white, // Background color for the container
-        border: Border.all(color: Colors.grey), // Border color
-        borderRadius: BorderRadius.circular(5), // Rounded corners
+        color: Colors.white, 
+        border: Border.all(color: Colors.grey), 
+        borderRadius: BorderRadius.circular(5), 
       ),
       child: DropdownButton<String>(
-        hint: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: const Text(
+        hint: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
             "Select Category",
-            style: TextStyle(color: Colors.grey), // Hint text color
+            style: TextStyle(color: Colors.grey), 
           ),
         ),
-        value: categoryShoe.selectedCategory, // Current selected category
+        value: categoryShoe.selectedCategory, 
         onChanged: (String? newValue) {
           print("values:$newValue");
           if (newValue != null) {
-            categoryShoe.selectCategory(newValue); // Update selected category
-            setState(() {
-              categoryShoe.selectedCategory = newValue;
-            });
+            categoryShoe.selectCategory(newValue);
           }
         },
         items: categoryShoe.categories.map<DropdownMenuItem<String>>((CategoryModel category) {
           return DropdownMenuItem<String>(
-            value: category.id, // Assuming 'id' is the field holding the category ID
+            value: category.id, 
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Text(
-                category.categoryName, // Display the category name
-                style: const TextStyle(color: Colors.black), // Text color for category name
+                category.categoryName, 
+                style: const TextStyle(color: Colors.black), 
               ),
             ),
           );
         }).toList(),
-        isExpanded: true, // Make the dropdown take the full width
-        style: const TextStyle(color: Colors.black), // Text color for the selected item
-        dropdownColor: Colors.white, // Background color of the dropdown menu
+        isExpanded: true, 
+        style: const TextStyle(color: Colors.black), 
+        dropdownColor: Colors.white, 
       ),
     );
   }

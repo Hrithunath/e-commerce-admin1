@@ -1,9 +1,9 @@
-
 import 'package:e_commerce_admin/model/catergoryshoe.dart';
 import 'package:e_commerce_admin/utils/validator/validator.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/views/widgets/add%20category/ShowModel_edit_button.dart';
 import 'package:e_commerce_admin/views/widgets/add%20category/add_category_button.dart';
+import 'package:e_commerce_admin/views/widgets/alert.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
@@ -11,11 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddCategory extends StatelessWidget {
-  AddCategory({super.key,
+  AddCategory({
+    super.key,
   });
-
- 
- 
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +47,9 @@ class AddCategory extends StatelessWidget {
               children: [
                 Expanded(
                   child: Textformfeildcustom(
-                    label: "Type here",
-                    controller: categoryController,
-                   validator: (value) => Validator.validateCategory(value)
-                  ),
+                      label: "Type here",
+                      controller: categoryController,
+                      validator: (value) => Validator.validateCategory(value)),
                 ),
                 SizedBox(width: screenWidth * 0.02),
                 ButtonCustomized(
@@ -133,15 +130,20 @@ class AddCategory extends StatelessWidget {
                         trailing: Wrap(
                           spacing: 8.0,
                           children: [
-                            ShowModelBottomSheetEditButton(category: category, formkey: formkey),
+                            ShowModelBottomSheetEditButton(
+                                category: category, formkey: formkey),
                             ButtonCustomized(
-                                text: "Delete",
-                                color: Color.fromARGB(255, 192, 42, 219),  
-                                onPressed: () {
-                                  categoryShoe.deleteCategory(category.id);
-                                }
-                                      
-                                ),
+                              text: "Delete",
+                              color: const Color.fromARGB(255, 192, 42, 219),
+                              onPressed: () {
+                                showAlertDialog(
+                                    context,
+                                    "Remove Category",
+                                    "Do you want to delete this category?",
+                                    () => categoryShoe
+                                        .deleteCategory(category.id));
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -155,9 +157,4 @@ class AddCategory extends StatelessWidget {
       ),
     );
   }
-
-  
-
 }
-
-
