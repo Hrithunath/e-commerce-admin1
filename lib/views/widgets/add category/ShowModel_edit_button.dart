@@ -38,7 +38,7 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            height: 400,
+                            height: 300,
                             width: 400,
                             color: Colors.grey,
                             child: categoryShoe
@@ -75,7 +75,7 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 30),
                       Textformfeildcustom(
                         label: "Edit Category Name",
                         controller:

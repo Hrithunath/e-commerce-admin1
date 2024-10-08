@@ -9,6 +9,7 @@ class CategoryShoe extends ChangeNotifier {
   List<CategoryModel> categories = [];
   Uint8List? pickedImage;
   String? selectedCategory;
+   bool isLoading = false;
 
   final FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -17,9 +18,11 @@ class CategoryShoe extends ChangeNotifier {
   }
 
   Future<void> createCategory(String categoryName) async {
+    isLoading = true; 
+    notifyListeners();
     try {
       if (pickedImage != null) {
-        String imageUrl = await uploadImage(); // Call the uploadImage method here
+        String imageUrl = await uploadImage(); 
 
         if (imageUrl.isNotEmpty) {
           final category = CategoryModel(
@@ -46,6 +49,9 @@ class CategoryShoe extends ChangeNotifier {
       }
     } catch (e) {
       print("Error adding Category: $e");
+    }finally {
+      isLoading = false; 
+      notifyListeners();
     }
   }
 
@@ -58,7 +64,7 @@ class CategoryShoe extends ChangeNotifier {
         return category;
       }).toList();
 
-      print("All Fetched Categories: $categories"); // This will print the entire list of fetched categories
+      print("All Fetched Categories: $categories"); 
       notifyListeners();
     } catch (e) {
       print("Error fetching categories: $e");
@@ -70,7 +76,7 @@ class CategoryShoe extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickImage() async { // Ensure this is at the class level
+  Future<void> pickImage() async { 
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
     );

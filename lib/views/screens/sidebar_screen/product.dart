@@ -1,8 +1,7 @@
 import 'package:e_commerce_admin/model/catergoryshoe.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
-import 'package:e_commerce_admin/views/screens/sidebar_screen/editProduct.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/editproduct.dart';
 import 'package:e_commerce_admin/views/widgets/alert.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
@@ -21,7 +20,7 @@ class ProductList extends StatelessWidget {
         () => Provider.of<ProductShoe>(context, listen: false).fetchProducts());
 
     final categoryShoe = Provider.of<CategoryShoe>(context);
-    final Sizes = Provider.of<SizeProvider>(context);
+    final sizes = Provider.of<SizeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +86,7 @@ class ProductList extends StatelessWidget {
                                 itemCount: productShoe.products.length,
                                 itemBuilder: (context, index) {
                                   final product = productShoe.products[index];
-                                  // Find the category using the categoryId
+                                  
                                   final category =
                                       categoryShoe.categories.firstWhere(
                                     (cat) => cat.id == product.category,
@@ -179,7 +178,7 @@ class ProductList extends StatelessWidget {
                                                                           .id)),
                                                     );
                                                   },
-                                                  icon: Icon(Icons.edit),
+                                                  icon: const Icon(Icons.edit),
                                                 ),
                                                 IconButton(
                                                   onPressed: () async {
@@ -195,7 +194,7 @@ class ProductList extends StatelessWidget {
                                                         );
                                                    
                                                   },
-                                                  icon: Icon(Icons.delete),
+                                                  icon: const Icon(Icons.delete),
                                                 ),
                                               ],
                                             )

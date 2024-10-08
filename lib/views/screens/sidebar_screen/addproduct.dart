@@ -1,67 +1,34 @@
-import 'dart:io';
-
-import 'package:e_commerce_admin/model/product.dart';
-import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
+import 'package:e_commerce_admin/utils/validator/validator.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
-import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
+import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/drawer.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
-import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/price.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/stock.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
 import 'package:e_commerce_admin/views/widgets/scaffold_message.dart';
-
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:e_commerce_admin/views/widgets/textformfeild.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EditProduct extends StatefulWidget {
-  final String productId;
-
-  EditProduct({super.key, required this.productId});
-
-  @override
-  _EditProductState createState() => _EditProductState();
-}
-
-class _EditProductState extends State<EditProduct> {
-  late final ProductModel product;
-  late final CategoryShoe categoryShoe;
+class AddProduct extends StatelessWidget {
+  AddProduct({super.key});
   final productNameController = TextEditingController();
   final productDescriptionController = TextEditingController();
   final priceController = TextEditingController();
   final stockController = TextEditingController();
-
-@override
-void initState() {
-  super.initState();
-  // Fetch the product here
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    final productShoe = Provider.of<ProductShoe>(context, listen: false);
-    product = productShoe.getProductById(widget.productId); 
-
-    // Now set the controller texts
-    productNameController.text = product.productName;
-    productDescriptionController.text = product.productDescription;
-    priceController.text = product.price.toString();
-    stockController.text = product.stock.toString();
-
-    // Set selected size and category
-    Provider.of<SizeProvider>(context, listen: false).setSelectedSize(product.sizes);
-   Provider.of<CategoryShoe>(context, listen: false).setCategory(product.category);
-
-  
-  });
-}
-
-
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final productShoe = Provider.of<ProductShoe>(context);
-    final formKey = GlobalKey<FormState>();
+    final categoryShoe = Provider.of<CategoryShoe>(context);
+    final sizeProvider = Provider.of<SizeProvider>(context);
+    final formkey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Padding(
@@ -69,7 +36,7 @@ void initState() {
             horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
         child: SingleChildScrollView(
           child: Form(
-            key: formKey,
+            key: formkey,
             child: Row(
               children: [
                 Expanded(
@@ -77,12 +44,11 @@ void initState() {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: TextCustom(
-                          text: "Edit Product",
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                          child: TextCustom(
+                        text: "Upload Product",
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      )),
                       Container(
                         width: screenWidth * 0.9,
                         decoration: const BoxDecoration(
@@ -101,7 +67,6 @@ void initState() {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              // Product Name Field
                               TextCustom(
                                 text: "Product Name",
                                 color: const Color.fromARGB(255, 112, 111, 111),
@@ -113,15 +78,9 @@ void initState() {
                                 backgroundcolor: Colors.white,
                                 controller: productNameController,
                                 keyboardType: TextInputType.name,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please provide the Product Name.';
-                                  }
-                                  return null;
-                                },
+                                  validator: (value) => Validator.validateProductName(value),
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              // Product Description Field
                               TextCustom(
                                 text: "Product Description",
                                 color: const Color.fromARGB(255, 112, 111, 111),
@@ -134,15 +93,9 @@ void initState() {
                                 backgroundcolor: Colors.white,
                                 controller: productDescriptionController,
                                 keyboardType: TextInputType.text,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please provide the Product Description.';
-                                  }
-                                  return null;
-                                },
+                                  validator: (value) => Validator.validateProductDescription(value)
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              // Size Selection
                               TextCustom(
                                 text: "Size",
                                 color: const Color.fromARGB(255, 112, 111, 111),
@@ -150,9 +103,8 @@ void initState() {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              SizeSelectionWidget(),
+                              const SizeSelectionWidget(),
                               SizedBox(height: screenHeight * 0.02),
-                              // Price and Stock Section
                               TextCustom(
                                 text: "Price and Stock",
                                 fontSize: 19,
@@ -163,66 +115,12 @@ void initState() {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // Price Field
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextCustom(text: "Price", fontSize: 17),
-                                        SizedBox(height: screenHeight * 0.01),
-                                        Textformfeildcustom(
-                                          label: "",
-                                          backgroundcolor: Colors.white,
-                                          controller: priceController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please provide the Price.';
-                                            } else if (double.tryParse(value) ==
-                                                    null ||
-                                                double.parse(value) <= 0) {
-                                              return 'Please provide a valid positive number for Price.';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  Price(screenHeight: screenHeight, priceController: priceController),
                                   SizedBox(width: screenWidth * 0.05),
-                                  // Stock Field
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextCustom(text: "Stock", fontSize: 17),
-                                        SizedBox(height: screenHeight * 0.01),
-                                        Textformfeildcustom(
-                                          label: "",
-                                          backgroundcolor: Colors.white,
-                                          controller: stockController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please provide the stock.';
-                                            } else if (int.tryParse(value) ==
-                                                    null ||
-                                                int.parse(value) < 0) {
-                                              return 'Please provide a valid non-negative number for Stock.';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  Stock(screenHeight: screenHeight, stockController: stockController),
                                 ],
                               ),
-                              // New Arrival Checkbox
+                              // New Arrival
                               CheckboxListTile(
                                 title: const Text("New Arrival"),
                                 value: productShoe.isNewArrival,
@@ -230,7 +128,8 @@ void initState() {
                                   productShoe.toggleNewArrival();
                                 },
                               ),
-                              // Top Collection Checkbox
+
+                              // Top Collection
                               CheckboxListTile(
                                 title: const Text("Top Collection"),
                                 value: productShoe.isTopCollection,
@@ -243,69 +142,83 @@ void initState() {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      // Save Button
                       Center(
-                        child: ButtonCustomized(
-                            text: "Save",
-                            height: screenHeight * 0.05,
-                            color: const Color.fromARGB(255, 192, 42, 219),
-                            onPressed: () async {
-  if (formKey.currentState!.validate()) {
-    // Check if the form is valid
-   final selectedSizes = Provider.of<SizeProvider>(context, listen: false).selectedSize; 
-final categoryShoe = Provider.of<CategoryShoe>(context, listen: false); // No assignment
+                          child: ButtonCustomized(
+                              text: "Add Product",
+                              height: screenHeight * 0.05,
+                              color: const Color.fromARGB(255, 192, 42, 219),
+                              onPressed: () {
+                               
+                                if (formkey.currentState!.validate()) {
+                                  // Check if sizes are selected
+                                  final selectedSizes =
+                                      Provider.of<SizeProvider>(context,
+                                              listen: false)
+                                          .selectedSize;
+                                  if (selectedSizes.isEmpty) {
+                                    showSnackBarMessage(context, "Please select at least one size.",backgroundColor: Colors.red);
+                                    return ;
+                                  }
 
-    if (selectedSizes.isEmpty) {
-      showSnackBarMessage(context, "Please select at least one size.", backgroundColor: Colors.red);
-      return; 
-    }
+                                  
+                                  if (productShoe.pickedImages == null ||
+                                      productShoe.pickedImages!.isEmpty) {
+                                    showSnackBarMessage(context, "Please upload at least one image.",backgroundColor: Colors.red);
+                                    return;
+                                  }
 
-    // // Check if at least one image is uploaded
-    // if (productShoe.pickedImages == null || productShoe.pickedImages!.isEmpty) {
-    //   showSnackBarMessage(context, "Please upload at least one image.", backgroundColor: Colors.red);
-    //   return; 
-    // }
+                                 
+                                  if (categoryShoe.selectedCategory == null ||
+                                      categoryShoe.selectedCategory ==
+                                          'Unknown') {
+                                    showSnackBarMessage(context, "Please select a category.",backgroundColor: Colors.red);
+                                    return;
+                                  }
 
-    // Check if a category is selected
-    if (categoryShoe.selectedCategory == null || categoryShoe.selectedCategory == 'Unknown') {
-      showSnackBarMessage(context, "Please select a category.", backgroundColor: Colors.red);
-      return; 
-    }
+                                 
+                                  final copiedSizes = List<String>.from(
+                                      selectedSizes); 
+                                  final double? price =
+                                      double.tryParse(priceController.text);
+                                  final int stock =
+                                      int.tryParse(stockController.text) ?? 0;
 
-    final double? price = double.tryParse(priceController.text); 
-    final int stock = int.tryParse(stockController.text) ?? 0; 
+                                  productShoe.createProduct(
+                                    productName: productNameController.text,
+                                    productDescription:
+                                        productDescriptionController.text,
+                                    sizes: copiedSizes,
+                                    price: price!,
+                                    stock: stock,
+                                    category: categoryShoe.selectedCategory ??
+                                        'Unknown',
+                                    isNewArrival: productShoe.isNewArrival,
+                                    isTopCollection:
+                                        productShoe.isTopCollection,
+                                  );
 
-    try {
-      await productShoe.editProduct(
-        product,
-        categoryShoe,
-        productName: productNameController.text, 
-        description: productDescriptionController.text, 
-        price: price!,
-        stock: stock, 
-        selectedSizes: selectedSizes, 
-        uploadNewImages: true
-      );
+                                 
+                                  productNameController.clear();
+                                  productDescriptionController.clear();
+                                  priceController.clear();
+                                  stockController.clear();
+                                  Provider.of<SizeProvider>(context,
+                                          listen: false)
+                                      .clearSize();
+                                  productShoe.clearPickedImages();
+                                  productShoe.resetCheckboxes();
+                                  categoryShoe.clearCategory();
 
-      // Clear fields after successful update
-      productNameController.clear();
-      productDescriptionController.clear();
-      priceController.clear();
-      stockController.clear();
+                                  showSnackBarMessage(context, 'Product added successfully!',backgroundColor: Colors.green);
 
-      // Navigate back or show a success message
-      Navigator.of(context).pop();
-    } catch (error) {
-      print("Error updating product: $error");
-    }
-  }
-},
-),
-                      ),
+                                  pageController.jumpToPage(1);
+                                }
+                              })
+                              ),
                     ],
                   ),
                 ),
-                   Expanded(
+                Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.05,
@@ -399,10 +312,9 @@ final categoryShoe = Provider.of<CategoryShoe>(context, listen: false); // No as
                 )
               ],
             ),
-            
           ),
         ),
       ),
     );
   }
-} 
+}

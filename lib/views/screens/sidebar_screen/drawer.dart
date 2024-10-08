@@ -1,4 +1,4 @@
-import 'package:e_commerce_admin/views/screens/sidebar_screen/addProduct.dart';
+import 'package:e_commerce_admin/views/screens/sidebar_screen/addproduct.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/addcategory.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/banner.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/product.dart';
