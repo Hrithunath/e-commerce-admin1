@@ -3,7 +3,7 @@ import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/views/screens/sidebar_screen/drawer.dart';
-import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/dropdown_widget.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/price.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/stock.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';

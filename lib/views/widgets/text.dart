@@ -15,7 +15,7 @@ class TextCustom extends StatelessWidget {
   final VoidCallback? onTap;
   final TextOverflow? overflow;
   
-  TextCustom({
+  const TextCustom({super.key, 
     required this.text,
     this.fontSize,
     this.fontWeight,

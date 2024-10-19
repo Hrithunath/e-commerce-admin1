@@ -21,7 +21,7 @@ class Stock extends StatelessWidget {
         crossAxisAlignment:
             CrossAxisAlignment.start,
         children: [
-          TextCustom(text: "Stock", fontSize: 17),
+          const TextCustom(text: "Stock", fontSize: 17),
           SizedBox(height: screenHeight * 0.01),
           Textformfeildcustom(
             label: "",

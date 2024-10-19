@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddCategory extends StatelessWidget {
-  AddCategory({
+  const AddCategory({
     super.key,
   });
 

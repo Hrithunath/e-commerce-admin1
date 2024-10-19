@@ -71,11 +71,11 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                               await categoryShoe
                                   .pickImage();
                             },
-                            icon: Icon(Icons.add),
+                            icon: const Icon(Icons.add),
                           ),
                         ],
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       Textformfeildcustom(
                         label: "Edit Category Name",
                         controller:
@@ -88,7 +88,7 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ButtonCustomized(
                         text: "Update",
                         onPressed: () async {

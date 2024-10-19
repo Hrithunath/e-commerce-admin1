@@ -24,7 +24,7 @@ class ProductList extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: TextCustom(
+        title: const TextCustom(
           text: "Product List",
           fontSize: 22,
           fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class ProductList extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
                           child: Table(
-                            children: [
+                            children: const [
                               TableRow(
                                 children: [
                                   TextCustom(text: "Sl NO"),
@@ -74,7 +74,7 @@ class ProductList extends StatelessWidget {
                         child: Consumer<ProductShoe>(
                           builder: (context, productShoe, child) {
                             if (productShoe.products.isEmpty) {
-                              return Center(
+                              return const Center(
                                 child: TextCustom(
                                   text: "No products available",
                                   fontSize: 18,

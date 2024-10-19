@@ -3,7 +3,7 @@ import 'package:e_commerce_admin/model/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
-import 'package:e_commerce_admin/views/widgets/add_product/dropDown_widget.dart';
+import 'package:e_commerce_admin/views/widgets/add_product/dropdown_widget.dart';
 import 'package:e_commerce_admin/views/widgets/add_product/size_widget.dart';
 import 'package:e_commerce_admin/views/widgets/button.dart';
 import 'package:e_commerce_admin/views/widgets/scaffold_message.dart';
@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 class EditProduct extends StatefulWidget {
   final String productId;
 
-  EditProduct({super.key, required this.productId});
+  const EditProduct({super.key, required this.productId});
 
   @override
   _EditProductState createState() => _EditProductState();
@@ -80,7 +80,7 @@ class _EditProductState extends State<EditProduct> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
+                      const Center(
                         child: TextCustom(
                           text: "Edit Product",
                           fontSize: 22,
@@ -99,16 +99,16 @@ class _EditProductState extends State<EditProduct> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextCustom(
+                              const TextCustom(
                                 text: "General Information",
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
                               // Product Name Field
-                              TextCustom(
+                              const TextCustom(
                                 text: "Product Name",
-                                color: const Color.fromARGB(255, 112, 111, 111),
+                                color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -126,9 +126,9 @@ class _EditProductState extends State<EditProduct> {
                               ),
                               SizedBox(height: screenHeight * 0.02),
                               // Product Description Field
-                              TextCustom(
+                              const TextCustom(
                                 text: "Product Description",
-                                color: const Color.fromARGB(255, 112, 111, 111),
+                                color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -147,9 +147,9 @@ class _EditProductState extends State<EditProduct> {
                               ),
                               SizedBox(height: screenHeight * 0.02),
                               // Size Selection
-                              TextCustom(
+                              const TextCustom(
                                 text: "Size",
-                                color: const Color.fromARGB(255, 112, 111, 111),
+                                color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -157,7 +157,7 @@ class _EditProductState extends State<EditProduct> {
                               const SizeSelectionWidget(),
                               SizedBox(height: screenHeight * 0.02),
                               // Price and Stock Section
-                              TextCustom(
+                              const TextCustom(
                                 text: "Price and Stock",
                                 fontSize: 19,
                                 fontWeight: FontWeight.w900,
@@ -173,7 +173,7 @@ class _EditProductState extends State<EditProduct> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        TextCustom(text: "Price", fontSize: 17),
+                                        const TextCustom(text: "Price", fontSize: 17),
                                         SizedBox(height: screenHeight * 0.01),
                                         Textformfeildcustom(
                                           label: "",
@@ -202,7 +202,7 @@ class _EditProductState extends State<EditProduct> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        TextCustom(text: "Stock", fontSize: 17),
+                                        const TextCustom(text: "Stock", fontSize: 17),
                                         SizedBox(height: screenHeight * 0.01),
                                         Textformfeildcustom(
                                           label: "",
@@ -338,7 +338,7 @@ class _EditProductState extends State<EditProduct> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextCustom(
+                            const TextCustom(
                               text: "Upload image",
                               fontSize: 19,
                               fontWeight: FontWeight.w700,
@@ -426,13 +426,13 @@ class _EditProductState extends State<EditProduct> {
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.07),
-                            TextCustom(
+                            const TextCustom(
                               text: "Category",
                               fontSize: 19,
                               fontWeight: FontWeight.w700,
                             ),
                             SizedBox(height: screenHeight * 0.02),
-                            TextCustom(
+                            const TextCustom(
                               text: "Product Category",
                               fontSize: 15,
                               fontWeight: FontWeight.w700,

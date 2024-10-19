@@ -9,7 +9,7 @@ class ButtonCustomized extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? borderColor;
-  const ButtonCustomized({
+  const ButtonCustomized({super.key, 
     required this.text,
     required this.onPressed,
     this.color,

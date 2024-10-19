@@ -97,7 +97,7 @@ class _SideBarState extends State<SideBar> {
               children: [
                 AddProduct(),
                 const ProductList(),
-                AddCategory(),
+                const AddCategory(),
                 const AdminBanner(),
               ],
             ),

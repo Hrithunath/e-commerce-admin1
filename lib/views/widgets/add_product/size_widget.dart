@@ -12,12 +12,12 @@ class SizeSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sizeProvider = Provider.of<SizeProvider>(context);
-    final List<String> ShoeSizes =["6","7","8","9"];
+    final List<String> shoeSizes =["6","7","8","9"];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: List.generate(ShoeSizes.length, (index) {
-          String size = ShoeSizes[index];
+        children: List.generate(shoeSizes.length, (index) {
+          String size = shoeSizes[index];
           bool isSelected = sizeProvider.selectedSize.contains(size);
           return GestureDetector(
             onTap: () {
