@@ -43,7 +43,7 @@ class AddProduct extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
+                      const Center(
                           child: TextCustom(
                         text: "Upload Product",
                         fontSize: 22,
@@ -61,15 +61,15 @@ class AddProduct extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextCustom(
+                              const TextCustom(
                                 text: "General Information",
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              TextCustom(
+                              const TextCustom(
                                 text: "Product Name",
-                                color: const Color.fromARGB(255, 112, 111, 111),
+                                color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -78,34 +78,36 @@ class AddProduct extends StatelessWidget {
                                 backgroundcolor: Colors.white,
                                 controller: productNameController,
                                 keyboardType: TextInputType.name,
-                                  validator: (value) => Validator.validateProductName(value),
+                                validator: (value) =>
+                                    Validator.validateProductName(value),
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              TextCustom(
+                              const TextCustom(
                                 text: "Product Description",
-                                color: const Color.fromARGB(255, 112, 111, 111),
+                                color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
                               Textformfeildcustom(
-                                maxLines: 6,
-                                label: "",
-                                backgroundcolor: Colors.white,
-                                controller: productDescriptionController,
-                                keyboardType: TextInputType.text,
-                                  validator: (value) => Validator.validateProductDescription(value)
-                              ),
+                                  maxLines: 6,
+                                  label: "",
+                                  backgroundcolor: Colors.white,
+                                  controller: productDescriptionController,
+                                  keyboardType: TextInputType.text,
+                                  validator: (value) =>
+                                      Validator.validateProductDescription(
+                                          value)),
                               SizedBox(height: screenHeight * 0.02),
-                              TextCustom(
+                              const TextCustom(
                                 text: "Size",
-                                color: const Color.fromARGB(255, 112, 111, 111),
+                                color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
                               const SizeSelectionWidget(),
                               SizedBox(height: screenHeight * 0.02),
-                              TextCustom(
+                              const TextCustom(
                                 text: "Price and Stock",
                                 fontSize: 19,
                                 fontWeight: FontWeight.w900,
@@ -115,9 +117,13 @@ class AddProduct extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Price(screenHeight: screenHeight, priceController: priceController),
+                                  Price(
+                                      screenHeight: screenHeight,
+                                      priceController: priceController),
                                   SizedBox(width: screenWidth * 0.05),
-                                  Stock(screenHeight: screenHeight, stockController: stockController),
+                                  Stock(
+                                      screenHeight: screenHeight,
+                                      stockController: stockController),
                                 ],
                               ),
                               // New Arrival
@@ -142,79 +148,84 @@ class AddProduct extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      Center(
-                          child: ButtonCustomized(
-                              text: "Add Product",
-                              height: screenHeight * 0.05,
-                              color: const Color.fromARGB(255, 192, 42, 219),
-                              onPressed: () {
-                               
-                                if (formkey.currentState!.validate()) {
-                                  // Check if sizes are selected
-                                  final selectedSizes =
-                                      Provider.of<SizeProvider>(context,
-                                              listen: false)
-                                          .selectedSize;
-                                  if (selectedSizes.isEmpty) {
-                                    showSnackBarMessage(context, "Please select at least one size.",backgroundColor: Colors.red);
-                                    return ;
-                                  }
-
-                                  
-                                  if (productShoe.pickedImages == null ||
-                                      productShoe.pickedImages!.isEmpty) {
-                                    showSnackBarMessage(context, "Please upload at least one image.",backgroundColor: Colors.red);
-                                    return;
-                                  }
-
-                                 
-                                  if (categoryShoe.selectedCategory == null ||
-                                      categoryShoe.selectedCategory ==
-                                          'Unknown') {
-                                    showSnackBarMessage(context, "Please select a category.",backgroundColor: Colors.red);
-                                    return;
-                                  }
-
-                                 
-                                  final copiedSizes = List<String>.from(
-                                      selectedSizes); 
-                                  final double? price =
-                                      double.tryParse(priceController.text);
-                                  final int stock =
-                                      int.tryParse(stockController.text) ?? 0;
-
-                                  productShoe.createProduct(
-                                    productName: productNameController.text,
-                                    productDescription:
-                                        productDescriptionController.text,
-                                    sizes: copiedSizes,
-                                    price: price!,
-                                    stock: stock,
-                                    category: categoryShoe.selectedCategory ??
-                                        'Unknown',
-                                    isNewArrival: productShoe.isNewArrival,
-                                    isTopCollection:
-                                        productShoe.isTopCollection,
-                                  );
-
-                                 
-                                  productNameController.clear();
-                                  productDescriptionController.clear();
-                                  priceController.clear();
-                                  stockController.clear();
-                                  Provider.of<SizeProvider>(context,
-                                          listen: false)
-                                      .clearSize();
-                                  productShoe.clearPickedImages();
-                                  productShoe.resetCheckboxes();
-                                  categoryShoe.clearCategory();
-
-                                  showSnackBarMessage(context, 'Product added successfully!',backgroundColor: Colors.green);
-
-                                  pageController.jumpToPage(1);
+                      Center(child: Consumer<ProductShoe>(
+                          builder: (context, productShoe, child) {
+                        return ButtonCustomized(
+                            // isLoading: productShoe.isLoading,
+                            text: "Add Product",
+                            height: screenHeight * 0.05,
+                            color: const Color.fromARGB(255, 192, 42, 219),
+                            onPressed: () {
+                              if (formkey.currentState!.validate()) {
+                                // Check if sizes are selected
+                                final selectedSizes = Provider.of<SizeProvider>(
+                                        context,
+                                        listen: false)
+                                    .selectedSize;
+                                if (selectedSizes.isEmpty) {
+                                  showSnackBarMessage(context,
+                                      "Please select at least one size.",
+                                      backgroundColor: Colors.red);
+                                  return;
                                 }
-                              })
-                              ),
+
+                                if (productShoe.pickedImages == null ||
+                                    productShoe.pickedImages!.isEmpty) {
+                                  showSnackBarMessage(context,
+                                      "Please upload at least one image.",
+                                      backgroundColor: Colors.red);
+                                  return;
+                                }
+
+                                if (categoryShoe.selectedCategory == null ||
+                                    categoryShoe.selectedCategory ==
+                                        'Unknown') {
+                                  showSnackBarMessage(
+                                      context, "Please select a category.",
+                                      backgroundColor: Colors.red);
+                                  return;
+                                }
+
+                                final copiedSizes =
+                                    List<String>.from(selectedSizes);
+                                final double? price =
+                                    double.tryParse(priceController.text);
+                                final int stock =
+                                    int.tryParse(stockController.text) ?? 0;
+
+                                productShoe.createProduct(
+                                  productName: productNameController.text,
+                                  productDescription:
+                                      productDescriptionController.text,
+                                  sizes: copiedSizes,
+                                  price: price!,
+                                  stock: stock,
+                                  category: categoryShoe.selectedCategory ??
+                                      'Unknown',
+                                  isNewArrival: productShoe.isNewArrival,
+                                  isTopCollection: productShoe.isTopCollection,
+                                );
+
+                                productNameController.clear();
+                                productDescriptionController.clear();
+                                priceController.clear();
+                                stockController.clear();
+                                if (!context.mounted) return;
+                                Provider.of<SizeProvider>(context,
+                                        listen: false)
+                                    .clearSize();
+                                productShoe.clearPickedImages();
+                                productShoe.resetCheckboxes();
+                                categoryShoe.clearCategory();
+
+                                showSnackBarMessage(
+                                    context, 'Product added successfully!',
+                                    backgroundColor: Colors.green);
+
+                                pageController.jumpToPage(1);
+                              }
+                            });
+                      })),
                     ],
                   ),
                 ),
@@ -236,7 +247,7 @@ class AddProduct extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextCustom(
+                            const TextCustom(
                               text: "Upload image",
                               fontSize: 19,
                               fontWeight: FontWeight.w700,
@@ -290,13 +301,13 @@ class AddProduct extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.07),
-                            TextCustom(
+                            const TextCustom(
                               text: "Category",
                               fontSize: 19,
                               fontWeight: FontWeight.w700,
                             ),
                             SizedBox(height: screenHeight * 0.02),
-                            TextCustom(
+                            const TextCustom(
                               text: "Product Category",
                               fontSize: 15,
                               fontWeight: FontWeight.w700,

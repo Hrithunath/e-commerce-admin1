@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ButtonCustomized extends StatelessWidget {
   final String text;
+  final bool isLoading;
   final VoidCallback onPressed;
   final Color? color;
   final TextStyle? textStyle;
@@ -9,7 +10,8 @@ class ButtonCustomized extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? borderColor;
-  const ButtonCustomized({super.key, 
+  const ButtonCustomized({
+    super.key,
     required this.text,
     required this.onPressed,
     this.color,
@@ -18,6 +20,7 @@ class ButtonCustomized extends StatelessWidget {
     this.borderColor,
     this.width,
     this.height,
+    this.isLoading = false,
   });
 
   @override
@@ -30,18 +33,22 @@ class ButtonCustomized extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius),
-              side: BorderSide(
-                color: borderColor ?? Colors.transparent, 
-                
-              )
-            ),
+                borderRadius: BorderRadius.circular(borderRadius),
+                side: BorderSide(
+                  color: borderColor ?? Colors.transparent,
+                )),
           ),
-          child: Text(
-            text,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-          )),
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Text(
+                  text,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
+                )),
     );
   }
 }

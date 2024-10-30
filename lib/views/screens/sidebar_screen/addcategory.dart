@@ -31,7 +31,7 @@ class AddCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: screenHeight * 0.02),
-                  Center(
+                  const Center(
                     child: TextCustom(
                       text: "Category Management",
                       fontSize: 22,
@@ -119,7 +119,7 @@ class AddCategory extends StatelessWidget {
                                 color: Colors.amber,
                                 child: const Center(
                                     child:
-                                        Icon(Icons.image, color: Colors.white)),
+                               Icon(Icons.image, color: Colors.white)),
                               ),
                         title: TextCustom(
                           text: category.categoryName,

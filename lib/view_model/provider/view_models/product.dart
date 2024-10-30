@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 class ProductShoe extends ChangeNotifier {
   List<ProductModel> products = [];
   List<Uint8List>? pickedImages;
+  bool isLoading = false;
+
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<void> createProduct({
@@ -23,6 +25,8 @@ class ProductShoe extends ChangeNotifier {
     required bool isNewArrival,
     required bool isTopCollection,
   }) async {
+    // isLoading = true;
+    // notifyListeners();
     print("Received sizes: $sizes");
     if (pickedImages != null && pickedImages!.isNotEmpty) {
       try {
@@ -44,13 +48,13 @@ class ProductShoe extends ChangeNotifier {
         final result = await FirebaseFirestore.instance
             .collection("products")
             .add(product.toJson());
-        
+
         products.add(product);
         await FirebaseFirestore.instance
             .collection("products")
             .doc(result.id)
             .update({"id": result.id});
-        
+
         notifyListeners();
         print("Product added with sizes: ${product.sizes}");
       } catch (e) {
@@ -59,20 +63,13 @@ class ProductShoe extends ChangeNotifier {
     } else {
       print("Error: No images picked");
     }
+    // await fetchProducts();
+    // isLoading = false;
   }
 
-  ProductModel getProductById(String id) {
-    return products.firstWhere(
-      (product) => product.id == id,
-      orElse: () {
-        throw Exception('Product with ID $id not found');
-      },
-    );
-}
-
-
-
   Future<void> fetchProducts() async {
+    isLoading = true;
+    notifyListeners();
     try {
       print("Fetching products");
       final querySnapshot =
@@ -80,47 +77,15 @@ class ProductShoe extends ChangeNotifier {
       products = querySnapshot.docs
           .map((doc) => ProductModel.fromJson(doc.data()))
           .toList();
-         print("Fetched Products: $products");
+      print("Fetched Products: $products");
       notifyListeners();
     } catch (e) {
       print("Error fetching products: $e");
-    }
-  }
-
-  Future<void> pickImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-    );
-    if (result != null) {
-      pickedImages = result.files.map((file) => file.bytes!).toList().cast<Uint8List>();
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
   }
-
- Future<List<String>> uploadImages() async {
-  List<String> imageUrls = [];
-  if (pickedImages != null && pickedImages!.isNotEmpty) {
-    for (var image in pickedImages!) {
-      try {
-        final storageRef = storage
-            .ref()
-            .child('productImages/${DateTime.now().millisecondsSinceEpoch}.png');
-        UploadTask uploadTask = storageRef.putData(image);
-        TaskSnapshot snapshot = await uploadTask;
-        String imageUrl = await snapshot.ref.getDownloadURL();
-        
-        if (imageUrl.isNotEmpty) {
-          imageUrls.add(imageUrl);
-        }
-      } catch (e) {
-        print("Error uploading image: $e");
-      }
-    }
-  }
-  return imageUrls;
-}
-
 
   Future<void> deleteProduct(String id) async {
     try {
@@ -131,58 +96,100 @@ class ProductShoe extends ChangeNotifier {
       print("Error deleting product: $e");
     }
   }
-  
+
   Future<void> editProduct(
-  ProductModel updatedProduct,
-  CategoryShoe categories,
-  {
+    ProductModel updatedProduct,
+    CategoryShoe categories, {
     required List<String> selectedSizes,
     required int stock,
     required double price,
     required String description,
     required String productName,
-    bool uploadNewImages = false, 
-  }
-) async {
-  try {
-    final productIndex = products.indexWhere((product) => product.id == updatedProduct.id);
-    if (productIndex != -1) {
-      List<String> imageUrls = updatedProduct.uploadImages;
+    bool uploadNewImages = false,
+  }) async {
+    try {
+      final productIndex =
+          products.indexWhere((product) => product.id == updatedProduct.id);
+      if (productIndex != -1) {
+        List<String> imageUrls = updatedProduct.uploadImages;
 
-      if (uploadNewImages && pickedImages != null && pickedImages!.isNotEmpty) {
-        List<String> newImageUrls = await uploadImages();
-        imageUrls.addAll(newImageUrls);
+        if (uploadNewImages &&
+            pickedImages != null &&
+            pickedImages!.isNotEmpty) {
+          List<String> newImageUrls = await uploadImages();
+          imageUrls.addAll(newImageUrls);
+        }
+
+        final updated = ProductModel(
+          id: updatedProduct.id,
+          productName: productName,
+          productDescription: description,
+          sizes: selectedSizes,
+          price: price,
+          stock: stock,
+          uploadImages: imageUrls,
+          category: categories.selectedCategory!,
+          isNewArrival: updatedProduct.isNewArrival,
+          isTopCollection: updatedProduct.isTopCollection,
+        );
+
+        await FirebaseFirestore.instance
+            .collection('products')
+            .doc(updated.id)
+            .update(updated.toJson());
+
+        products[productIndex] = updated;
+        notifyListeners();
       }
-
-      final updated = ProductModel(
-        id: updatedProduct.id,
-        productName: productName,
-        productDescription: description,
-        sizes: selectedSizes,
-        price: price,
-        stock: stock,
-        uploadImages: imageUrls,
-       category: categories.selectedCategory!,
-        isNewArrival: updatedProduct.isNewArrival,
-        isTopCollection: updatedProduct.isTopCollection,
-      );
-
-      await FirebaseFirestore.instance
-          .collection('products')
-          .doc(updated.id)
-          .update(updated.toJson());
-
-      products[productIndex] = updated;
-      notifyListeners(); 
+    } catch (e) {
+      print("Error updating product: $e");
     }
-  } catch (e) {
-    print("Error updating product: $e");
   }
-}
 
+  ProductModel getProductById(String id) {
+    return products.firstWhere(
+      (product) => product.id == id,
+      orElse: () {
+        throw Exception('Product with ID $id not found');
+      },
+    );
+  }
 
+  Future<void> pickImages() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: true,
+    );
+    if (result != null) {
+      pickedImages =
+          result.files.map((file) => file.bytes!).toList().cast<Uint8List>();
+      notifyListeners();
+    }
+  }
 
-   bool _isNewArrival = false;
+  Future<List<String>> uploadImages() async {
+    List<String> imageUrls = [];
+    if (pickedImages != null && pickedImages!.isNotEmpty) {
+      for (var image in pickedImages!) {
+        try {
+          final storageRef = storage.ref().child(
+              'productImages/${DateTime.now().millisecondsSinceEpoch}.png');
+          UploadTask uploadTask = storageRef.putData(image);
+          TaskSnapshot snapshot = await uploadTask;
+          String imageUrl = await snapshot.ref.getDownloadURL();
+
+          if (imageUrl.isNotEmpty) {
+            imageUrls.add(imageUrl);
+          }
+        } catch (e) {
+          print("Error uploading image: $e");
+        }
+      }
+    }
+    return imageUrls;
+  }
+
+  bool _isNewArrival = false;
   bool _isTopCollection = false;
 
   bool get isNewArrival => _isNewArrival;
@@ -197,13 +204,14 @@ class ProductShoe extends ChangeNotifier {
     _isTopCollection = !_isTopCollection;
     notifyListeners();
   }
-   void resetCheckboxes() {
+
+  void resetCheckboxes() {
     _isNewArrival = false;
     _isTopCollection = false;
     notifyListeners();
   }
 
-   void clearPickedImages() {
+  void clearPickedImages() {
     pickedImages = null;
     notifyListeners();
   }

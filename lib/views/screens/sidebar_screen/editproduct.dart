@@ -105,7 +105,7 @@ class _EditProductState extends State<EditProduct> {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              // Product Name Field
+                             
                               const TextCustom(
                                 text: "Product Name",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -125,7 +125,7 @@ class _EditProductState extends State<EditProduct> {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              // Product Description Field
+                              
                               const TextCustom(
                                 text: "Product Description",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -146,7 +146,7 @@ class _EditProductState extends State<EditProduct> {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              // Size Selection
+                              
                               const TextCustom(
                                 text: "Size",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -167,7 +167,7 @@ class _EditProductState extends State<EditProduct> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // Price Field
+                                  
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -196,7 +196,7 @@ class _EditProductState extends State<EditProduct> {
                                     ),
                                   ),
                                   SizedBox(width: screenWidth * 0.05),
-                                  // Stock Field
+                                 
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -247,7 +247,7 @@ class _EditProductState extends State<EditProduct> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      // Save Button
+                     
                       Center(
                         child: ButtonCustomized(
                           text: "Save",
@@ -255,7 +255,7 @@ class _EditProductState extends State<EditProduct> {
                           color: const Color.fromARGB(255, 192, 42, 219),
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              // Check if the form is valid
+                             
                               final selectedSizes = Provider.of<SizeProvider>(
                                       context,
                                       listen: false)

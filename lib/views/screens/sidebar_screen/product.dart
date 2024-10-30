@@ -86,7 +86,7 @@ class ProductList extends StatelessWidget {
                                 itemCount: productShoe.products.length,
                                 itemBuilder: (context, index) {
                                   final product = productShoe.products[index];
-                                  
+
                                   final category =
                                       categoryShoe.categories.firstWhere(
                                     (cat) => cat.id == product.category,
@@ -186,15 +186,15 @@ class ProductList extends StatelessWidget {
                                                         context,
                                                         "Remove Product",
                                                         "Do you want to delete this Product?",
-                                                        () =>  Provider.of<ProductShoe>(
-                                                            context,
-                                                            listen: false)
-                                                        .deleteProduct(
-                                                            product.id) 
-                                                        );
-                                                   
+                                                        () => Provider.of<
+                                                                    ProductShoe>(
+                                                                context,
+                                                                listen: false)
+                                                            .deleteProduct(
+                                                                product.id));
                                                   },
-                                                  icon: const Icon(Icons.delete),
+                                                  icon:
+                                                      const Icon(Icons.delete),
                                                 ),
                                               ],
                                             )
