@@ -56,6 +56,15 @@ class CategoryShoe extends ChangeNotifier {
     }
   }
 
+  String getCategoryName(String categoryId) {
+    final category = categories.firstWhere(
+      (cat) => cat.id == categoryId,
+      orElse: () =>
+          CategoryModel(id: '', categoryName: 'Unknown', imageUrl: ''),
+    );
+    return category.categoryName;
+  }
+
   Future<void> fetchCategories() async {
     try {
       QuerySnapshot snapshot =

@@ -12,31 +12,29 @@ class Textformfeildcustom extends StatelessWidget {
   IconData? sufixIcon;
   final double? height;
   final double? width;
-  int? maxLines;
+  int maxLines;
 
-  Textformfeildcustom({
-    required this.label,
-    this.prefixIcon,
-    this.sufixIcon,
-    this.hintText,
-    this.keyboardType,
-    this.controller,
-    this.validator,
-    this.height,
-    this.width,
-    this.backgroundcolor = Colors.white,
-    this.obscureText = false,
-    this.maxLines = 1
-
-  });
+  Textformfeildcustom(
+      {super.key,
+      required this.label,
+      this.prefixIcon,
+      this.sufixIcon,
+      this.hintText,
+      this.keyboardType,
+      this.controller,
+      this.validator,
+      this.height,
+      this.width,
+      this.backgroundcolor = Colors.white,
+      this.obscureText = false,
+      this.maxLines = 1});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
       width: width,
-    
-       color: backgroundcolor, 
+      color: backgroundcolor,
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
@@ -44,12 +42,13 @@ class Textformfeildcustom extends StatelessWidget {
         maxLines: maxLines,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255, 235, 233, 233))),
+              borderSide:
+                  BorderSide(color: Color.fromARGB(255, 235, 233, 233))),
           hintText: hintText,
           labelText: label,
-          labelStyle: const TextStyle(color: Color.fromARGB(255, 175, 165, 165)),
+          labelStyle:
+              const TextStyle(color: Color.fromARGB(255, 175, 165, 165)),
           prefixIcon: Icon(prefixIcon),
-         
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(5),

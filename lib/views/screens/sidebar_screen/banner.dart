@@ -27,8 +27,8 @@ class AdminBanner extends StatelessWidget {
                   children: [
                     Container(
                       color: const Color.fromARGB(255, 240, 234, 234),
-                      width: screenWidth * 0.3,
-                      height: screenHeight * 0.5,
+                      width: screenWidth * 0.2,
+                      height: screenHeight * 0.3,
                       child: banner.pickedImage != null
                           ? Image.memory(banner.pickedImage!)
                           : const Center(child: Text("No Image Selected")),

@@ -60,7 +60,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 SizedBox(width: screenWidth * 0.02),
                 Container(
-                  color: Colors.grey,
+                  color: const Color.fromARGB(255, 240, 234, 234),
                   height: screenHeight * 0.2,
                   width: screenWidth * 0.2,
                   child: categoryShoe.pickedImage != null
@@ -119,7 +119,7 @@ class AddCategory extends StatelessWidget {
                                 color: Colors.amber,
                                 child: const Center(
                                     child:
-                               Icon(Icons.image, color: Colors.white)),
+                                        Icon(Icons.image, color: Colors.white)),
                               ),
                         title: TextCustom(
                           text: category.categoryName,

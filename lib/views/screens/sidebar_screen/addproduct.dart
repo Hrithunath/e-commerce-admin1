@@ -156,6 +156,8 @@ class AddProduct extends StatelessWidget {
                             height: screenHeight * 0.05,
                             color: const Color.fromARGB(255, 192, 42, 219),
                             onPressed: () {
+                              // final categoryname =
+                              //     context.read<CategoryShoe>().selectedCategory;
                               if (formkey.currentState!.validate()) {
                                 // Check if sizes are selected
                                 final selectedSizes = Provider.of<SizeProvider>(
@@ -202,6 +204,9 @@ class AddProduct extends StatelessWidget {
                                   stock: stock,
                                   category: categoryShoe.selectedCategory ??
                                       'Unknown',
+                                  categoryNames: categoryShoe.getCategoryName(
+                                      categoryShoe.selectedCategory ??
+                                          'Unknown'),
                                   isNewArrival: productShoe.isNewArrival,
                                   isTopCollection: productShoe.isTopCollection,
                                 );

@@ -1,4 +1,3 @@
-
 import 'package:e_commerce_admin/model/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
@@ -38,10 +37,8 @@ class _EditProductState extends State<EditProduct> {
 
   Future<void> _fetchProduct() async {
     final productShoe = Provider.of<ProductShoe>(context, listen: false);
-    product = await productShoe
-        .getProductById(widget.productId); // Assuming this is an async method
+    product = await productShoe.getProductById(widget.productId);
 
-    // Now set the controller texts if the product is fetched
     if (product != null) {
       productNameController.text = product!.productName;
       productDescriptionController.text = product.productDescription;
@@ -105,7 +102,7 @@ class _EditProductState extends State<EditProduct> {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                             
+
                               const TextCustom(
                                 text: "Product Name",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -125,7 +122,7 @@ class _EditProductState extends State<EditProduct> {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              
+
                               const TextCustom(
                                 text: "Product Description",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -146,7 +143,7 @@ class _EditProductState extends State<EditProduct> {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
-                              
+
                               const TextCustom(
                                 text: "Size",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -167,13 +164,13 @@ class _EditProductState extends State<EditProduct> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const TextCustom(text: "Price", fontSize: 17),
+                                        const TextCustom(
+                                            text: "Price", fontSize: 17),
                                         SizedBox(height: screenHeight * 0.01),
                                         Textformfeildcustom(
                                           label: "",
@@ -196,13 +193,13 @@ class _EditProductState extends State<EditProduct> {
                                     ),
                                   ),
                                   SizedBox(width: screenWidth * 0.05),
-                                 
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const TextCustom(text: "Stock", fontSize: 17),
+                                        const TextCustom(
+                                            text: "Stock", fontSize: 17),
                                         SizedBox(height: screenHeight * 0.01),
                                         Textformfeildcustom(
                                           label: "",
@@ -247,7 +244,6 @@ class _EditProductState extends State<EditProduct> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                     
                       Center(
                         child: ButtonCustomized(
                           text: "Save",
@@ -255,7 +251,6 @@ class _EditProductState extends State<EditProduct> {
                           color: const Color.fromARGB(255, 192, 42, 219),
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                             
                               final selectedSizes = Provider.of<SizeProvider>(
                                       context,
                                       listen: false)
@@ -389,8 +384,8 @@ class _EditProductState extends State<EditProduct> {
                                         (productShoe.pickedImages?.length ??
                                             0)) {
                                       return Container(
-                                        margin:
-                                            const EdgeInsets.symmetric(horizontal: 8),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8),
                                         color: Colors.white,
                                         child: Image.memory(
                                           productShoe.pickedImages![index],

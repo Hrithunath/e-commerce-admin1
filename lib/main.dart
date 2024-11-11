@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_admin/firebase_options.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/category.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/banner.dart';
+import 'package:e_commerce_admin/view_model/provider/view_models/order.dart';
 import 'package:e_commerce_admin/view_model/provider/view_models/product.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/sidebar.dart';
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
@@ -10,21 +12,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
- 
-
-await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
+  );
   runApp(
-    
-       MultiProvider(
+    MultiProvider(
       providers: [
-
         ChangeNotifierProvider(create: (_) => CategoryShoe()),
         ChangeNotifierProvider(create: (_) => ProductShoe()),
         ChangeNotifierProvider(create: (_) => Banneres()),
         ChangeNotifierProvider(create: (_) => SizeProvider()),
-        ChangeNotifierProvider(create: (_) => SidebarProvider(),)
+        ChangeNotifierProvider(create: (_) => Orders()),
+        ChangeNotifierProvider(
+          create: (_) => SidebarProvider(),
+        )
       ],
       child: const MyApp(),
     ),
@@ -36,10 +37,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   MaterialApp(
-      debugShowCheckedModeBanner: false,
-     home: SideBar()
-      );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: SideBar());
   }
-  
 }

@@ -22,6 +22,7 @@ class ProductShoe extends ChangeNotifier {
     required double price,
     required int stock,
     required String category,
+    required String categoryNames,
     required bool isNewArrival,
     required bool isTopCollection,
   }) async {
@@ -41,6 +42,7 @@ class ProductShoe extends ChangeNotifier {
           stock: stock,
           uploadImages: imageUrls,
           category: category,
+          categoryNames: categoryNames,
           isNewArrival: isNewArrival,
           isTopCollection: isTopCollection,
         );
@@ -129,6 +131,7 @@ class ProductShoe extends ChangeNotifier {
           stock: stock,
           uploadImages: imageUrls,
           category: categories.selectedCategory!,
+          categoryNames: categories.selectedCategory!,
           isNewArrival: updatedProduct.isNewArrival,
           isTopCollection: updatedProduct.isTopCollection,
         );
