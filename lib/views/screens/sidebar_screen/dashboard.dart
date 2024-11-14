@@ -1,5 +1,6 @@
 import 'package:e_commerce_admin/view_model/provider/view_models/order.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class Dashboard extends StatelessWidget {
               child: TextCustom(
                   text: 'Dashboard', fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
             FutureBuilder<Map<String, int>>(
                 future: orderCount.fetchAllOderCount(),
                 builder: (context, snapshot) {
@@ -202,7 +203,73 @@ class Dashboard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // return Center(child: Text("No data found")),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 500,
+                            width: 700,
+                            child: BarChart(
+                              BarChartData(
+                                alignment: BarChartAlignment.spaceEvenly,
+                                //                           titlesData: FlTitlesData(
+                                //   bottomTitles: SideTitles(
+                                //     showTitles: true,
+                                //     getTitles: (value) {
+                                //       switch (value.toInt()) {
+                                //         case 0:
+                                //           return 'Pending';
+                                //         case 1:
+                                //           return 'Shipped';
+                                //         case 2:
+                                //           return 'Completed';
+                                //         case 3:
+                                //           return 'Total';
+                                //         default:
+                                //           return '';
+                                //       }
+                                //     },
+                                //     margin: 10,
+                                //   ),
+                                //   leftTitles: SideTitles(showTitles: true),
+                                // ),
+                                barGroups: [
+                                  BarChartGroupData(x: 0, barRods: [
+                                    BarChartRodData(
+                                      toY: (statusCounts['Pending'] ??
+                                              0 + statusCounts['Shipped']! ??
+                                              0 + statusCounts['Delivered']! ??
+                                              0)
+                                          .toDouble(),
+                                    ),
+                                  ]),
+                                  BarChartGroupData(x: 0, barRods: [
+                                    BarChartRodData(
+                                      toY: (statusCounts['Pending'] ?? 0)
+                                          .toDouble(),
+                                    ),
+                                  ]),
+                                  BarChartGroupData(x: 0, barRods: [
+                                    BarChartRodData(
+                                      toY: (statusCounts['Shipped'] ?? 0)
+                                          .toDouble(),
+                                    ),
+                                  ]),
+                                  BarChartGroupData(x: 0, barRods: [
+                                    BarChartRodData(
+                                      toY: (statusCounts['Delivered'] ?? 0)
+                                          .toDouble(),
+                                    ),
+                                  ]),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   );
                 }),

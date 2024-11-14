@@ -58,7 +58,7 @@ class OrderList extends StatelessWidget {
                               TextCustom(text: user['email'] ?? 'No email'),
                               SizedBox(
                                 height: 30,
-                                width: 5,
+                                width: 50,
                                 child: ButtonCustomized(
                                     color: Colors.amber,
                                     text: 'OrderDetails',
