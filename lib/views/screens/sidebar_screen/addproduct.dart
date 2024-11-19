@@ -49,10 +49,12 @@ class AddProduct extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       )),
+
+                      //========= General Information Section =========
                       Container(
                         width: screenWidth * 0.9,
                         decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 204, 199, 199),
+                          color: Color.fromARGB(255, 226, 220, 220),
                         ),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
@@ -67,12 +69,14 @@ class AddProduct extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
+                              //========= Product Name Field =========
                               const TextCustom(
                                 text: "Product Name",
                                 color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
+
                               Textformfeildcustom(
                                 label: "",
                                 backgroundcolor: Colors.white,
@@ -82,12 +86,15 @@ class AddProduct extends StatelessWidget {
                                     Validator.validateProductName(value),
                               ),
                               SizedBox(height: screenHeight * 0.02),
+
+                              //========= Product Description Field =========
                               const TextCustom(
                                 text: "Product Description",
                                 color: Color.fromARGB(255, 112, 111, 111),
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
                               ),
+
                               Textformfeildcustom(
                                   maxLines: 6,
                                   label: "",
@@ -98,6 +105,8 @@ class AddProduct extends StatelessWidget {
                                       Validator.validateProductDescription(
                                           value)),
                               SizedBox(height: screenHeight * 0.02),
+
+                              //========= Size Selection Widget =========
                               const TextCustom(
                                 text: "Size",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -107,12 +116,16 @@ class AddProduct extends StatelessWidget {
                               SizedBox(height: screenHeight * 0.02),
                               const SizeSelectionWidget(),
                               SizedBox(height: screenHeight * 0.02),
+
+                              //========= Price and Stock Section =========
                               const TextCustom(
                                 text: "Price and Stock",
                                 fontSize: 19,
                                 fontWeight: FontWeight.w900,
                               ),
                               SizedBox(height: screenHeight * 0.02),
+
+                              //========= Price and Stock input fields side by side =========
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -126,7 +139,7 @@ class AddProduct extends StatelessWidget {
                                       stockController: stockController),
                                 ],
                               ),
-                              // New Arrival
+                              //========= Checkbox for New Arrival =========
                               CheckboxListTile(
                                 title: const Text("New Arrival"),
                                 value: productShoe.isNewArrival,
@@ -135,7 +148,7 @@ class AddProduct extends StatelessWidget {
                                 },
                               ),
 
-                              // Top Collection
+                              //========= Checkbox for Top Collection =========
                               CheckboxListTile(
                                 title: const Text("Top Collection"),
                                 value: productShoe.isTopCollection,
@@ -147,19 +160,18 @@ class AddProduct extends StatelessWidget {
                           ),
                         ),
                       ),
+
+                      //========= Submit Button =========
                       SizedBox(height: screenHeight * 0.02),
                       Center(child: Consumer<ProductShoe>(
                           builder: (context, productShoe, child) {
                         return ButtonCustomized(
-                            // isLoading: productShoe.isLoading,
                             text: "Add Product",
                             height: screenHeight * 0.05,
-                            color: const Color.fromARGB(255, 192, 42, 219),
+                            color: Colors.blue,
                             onPressed: () {
-                              // final categoryname =
-                              //     context.read<CategoryShoe>().selectedCategory;
                               if (formkey.currentState!.validate()) {
-                                // Check if sizes are selected
+                                //========= Check if sizes are selected =========
                                 final selectedSizes = Provider.of<SizeProvider>(
                                         context,
                                         listen: false)
@@ -171,6 +183,8 @@ class AddProduct extends StatelessWidget {
                                   return;
                                 }
 
+                                //========= Check if product images are selected =========
+
                                 if (productShoe.pickedImages == null ||
                                     productShoe.pickedImages!.isEmpty) {
                                   showSnackBarMessage(context,
@@ -178,6 +192,8 @@ class AddProduct extends StatelessWidget {
                                       backgroundColor: Colors.red);
                                   return;
                                 }
+
+                                //========= Check if a category is selected =========
 
                                 if (categoryShoe.selectedCategory == null ||
                                     categoryShoe.selectedCategory ==
@@ -234,6 +250,7 @@ class AddProduct extends StatelessWidget {
                     ],
                   ),
                 ),
+                //========= Right side for image upload section =========
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
@@ -243,7 +260,7 @@ class AddProduct extends StatelessWidget {
                       height: screenHeight * 0.8,
                       width: screenWidth * 0.9,
                       decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 204, 199, 199),
+                        color: Color.fromARGB(255, 226, 220, 220),
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(

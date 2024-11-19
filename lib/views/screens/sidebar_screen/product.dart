@@ -46,7 +46,7 @@ class ProductList extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(7),
-                          color: Colors.green,
+                          color: Colors.blue,
                         ),
                         height: 40,
                         child: Padding(
@@ -56,14 +56,47 @@ class ProductList extends StatelessWidget {
                             children: const [
                               TableRow(
                                 children: [
-                                  TextCustom(text: "Sl NO"),
-                                  TextCustom(text: "Image"),
-                                  TextCustom(text: "Product Name"),
-                                  TextCustom(text: "Category"),
-                                  TextCustom(text: "sizes"),
-                                  TextCustom(text: "Stock"),
-                                  TextCustom(text: "Price"),
-                                  TextCustom(text: "Actions"),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "Sl NO")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "Image")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child:
+                                            TextCustom(text: "Product Name")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "Category")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "sizes")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "Stock")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "Price")),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: TextCustom(text: "Actions")),
+                                  ),
                                 ],
                               ),
                             ],
@@ -97,111 +130,165 @@ class ProductList extends StatelessWidget {
                                     ),
                                   );
 
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Table(
-                                      children: [
-                                        TableRow(
-                                          children: [
-                                            TextCustom(text: "${index + 1}"),
-                                            SizedBox(
-                                              height: 50,
-                                              width: 40,
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: (product.uploadImages !=
-                                                            null &&
-                                                        product.uploadImages
-                                                            .isNotEmpty)
-                                                    ? Image.network(
-                                                        product.uploadImages[0],
-                                                        height:
-                                                            screenHeight * 0.05,
-                                                        width:
-                                                            screenWidth * 0.04,
-                                                        fit: BoxFit.cover,
-                                                        errorBuilder: (context,
-                                                            error, stackTrace) {
-                                                          return Container(
-                                                            height:
-                                                                screenHeight *
-                                                                    0.05,
-                                                            width: screenWidth *
-                                                                0.04,
-                                                            color: Colors.red,
-                                                            child: const Center(
-                                                              child: Icon(
-                                                                  Icons.error,
+                                  return Table(
+                                    border: TableBorder.all(
+                                      color: Colors.grey,
+                                      width: 1.0,
+                                    ),
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                                child: TextCustom(
+                                                    text: "${index + 1}")),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: SizedBox(
+                                                height: 50,
+                                                width: 40,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  child:
+                                                      (product.uploadImages !=
+                                                                  null &&
+                                                              product
+                                                                  .uploadImages
+                                                                  .isNotEmpty)
+                                                          ? Image.network(
+                                                              product
+                                                                  .uploadImages[0],
+                                                              height:
+                                                                  screenHeight *
+                                                                      0.05,
+                                                              width:
+                                                                  screenWidth *
+                                                                      0.04,
+                                                              fit: BoxFit.cover,
+                                                              errorBuilder:
+                                                                  (context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                return Container(
+                                                                  height:
+                                                                      screenHeight *
+                                                                          0.05,
+                                                                  width:
+                                                                      screenWidth *
+                                                                          0.04,
                                                                   color: Colors
-                                                                      .white),
-                                                            ),
-                                                          );
-                                                        },
-                                                      )
-                                                    : Container(
-                                                        height:
-                                                            screenHeight * 0.05,
-                                                        width:
-                                                            screenWidth * 0.04,
-                                                        color: Colors.amber,
-                                                        child: const Center(
-                                                          child: Icon(
-                                                              Icons.image,
+                                                                      .red,
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Icon(
+                                                                        Icons
+                                                                            .error,
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            )
+                                                          : Container(
+                                                              height:
+                                                                  screenHeight *
+                                                                      0.05,
+                                                              width:
+                                                                  screenWidth *
+                                                                      0.04,
                                                               color:
-                                                                  Colors.white),
-                                                        ),
-                                                      ),
+                                                                  Colors.amber,
+                                                              child:
+                                                                  const Center(
+                                                                child: Icon(
+                                                                    Icons.image,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            ),
+                                                ),
                                               ),
                                             ),
-                                            TextCustom(
-                                                text: product.productName),
-                                            TextCustom(
-                                                text: category?.categoryName ??
-                                                    "No Category"),
-                                            TextCustom(
-                                                text: product.sizes.join(',')),
-                                            TextCustom(
-                                                text: product.stock.toString()),
-                                            TextCustom(
-                                                text:
-                                                    '₹${product.price.toString()}'),
-                                            Row(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              EditProduct(
-                                                                  productId:
-                                                                      product
-                                                                          .id)),
-                                                    );
-                                                  },
-                                                  icon: const Icon(Icons.edit),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () async {
-                                                    showAlertDialog(
-                                                        context,
-                                                        "Remove Product",
-                                                        "Do you want to delete this Product?",
-                                                        () => Provider.of<
-                                                                    ProductShoe>(
-                                                                context,
-                                                                listen: false)
-                                                            .deleteProduct(
-                                                                product.id));
-                                                  },
-                                                  icon:
-                                                      const Icon(Icons.delete),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: TextCustom(
+                                                  text: product.productName),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: TextCustom(
+                                                  text:
+                                                      category?.categoryName ??
+                                                          "No Category"),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: TextCustom(
+                                                  text:
+                                                      product.sizes.join(',')),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: TextCustom(
+                                                  text:
+                                                      product.stock.toString()),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: TextCustom(
+                                                  text:
+                                                      '₹${product.price.toString()}'),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditProduct(
+                                                                productId:
+                                                                    product
+                                                                        .id)),
+                                                  );
+                                                },
+                                                icon: const Icon(Icons.edit),
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  showAlertDialog(
+                                                      context,
+                                                      "Remove Product",
+                                                      "Do you want to delete this Product?",
+                                                      () => Provider.of<
+                                                                  ProductShoe>(
+                                                              context,
+                                                              listen: false)
+                                                          .deleteProduct(
+                                                              product.id));
+                                                },
+                                                icon: const Icon(Icons.delete),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   );
                                 },
                               );

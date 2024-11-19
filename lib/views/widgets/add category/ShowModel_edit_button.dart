@@ -20,11 +20,10 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
     return ButtonCustomized(
       text: "Edit",
       onPressed: () {
-        final editCategoryController =
-            TextEditingController(
+        final editCategoryController = TextEditingController(
           text: category.categoryName,
         );
-    
+
         showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
@@ -41,35 +40,27 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                             height: 300,
                             width: 400,
                             color: Colors.grey,
-                            child: categoryShoe
-                                        .pickedImage !=
-                                    null
+                            child: categoryShoe.pickedImage != null
                                 ? Image.memory(
-                                    categoryShoe
-                                        .pickedImage!,
+                                    categoryShoe.pickedImage!,
                                     height: 200,
                                     width: 400,
                                     fit: BoxFit.cover,
                                   )
-                                : category.imageUrl
-                                        .isNotEmpty
+                                : category.imageUrl.isNotEmpty
                                     ? Image.network(
-                                        category
-                                            .imageUrl,
+                                        category.imageUrl,
                                         height: 200,
                                         width: 400,
-                                        fit: BoxFit
-                                            .cover,
+                                        fit: BoxFit.cover,
                                       )
                                     : const Center(
-                                        child: Text(
-                                            "No Image Selected"),
+                                        child: Text("No Image Selected"),
                                       ),
                           ),
                           IconButton(
                             onPressed: () async {
-                              await categoryShoe
-                                  .pickImage();
+                              await categoryShoe.pickImage();
                             },
                             icon: const Icon(Icons.add),
                           ),
@@ -78,11 +69,9 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                       const SizedBox(height: 30),
                       Textformfeildcustom(
                         label: "Edit Category Name",
-                        controller:
-                            editCategoryController,
+                        controller: editCategoryController,
                         validator: (value) {
-                          if (value == null ||
-                              value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return "Category is required";
                           }
                           return null;
@@ -92,33 +81,24 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                       ButtonCustomized(
                         text: "Update",
                         onPressed: () async {
-                          if (formkey.currentState!
-                              .validate()) {
+                          if (formkey.currentState!.validate()) {
                             final updatedImageUrl =
-                                categoryShoe.pickedImage !=
-                                        null
-                                    ? await categoryShoe
-                                        .uploadImage()
+                                categoryShoe.pickedImage != null
+                                    ? await categoryShoe.uploadImage()
                                     : category.imageUrl;
-    
-                            final updatedCategory =
-                                CategoryModel(
-                              categoryName:
-                                  editCategoryController
-                                      .text,
+
+                            final updatedCategory = CategoryModel(
+                              categoryName: editCategoryController.text,
                               imageUrl: updatedImageUrl,
                               id: category.id,
                             );
-    
-                            await categoryShoe
-                                .editCategory(
-                                    updatedCategory);
-                            categoryShoe
-                                .clearPickedImage();
+
+                            await categoryShoe.editCategory(updatedCategory);
+                            categoryShoe.clearPickedImage();
                             Navigator.pop(context);
                           }
                         },
-                        color: const Color.fromARGB(255, 192, 42, 219),
+                        color: Colors.blue,
                       ),
                     ],
                   ),
@@ -128,7 +108,7 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
           },
         );
       },
-      color: const Color.fromARGB(255, 192, 42, 219),
+      color: Colors.blue,
     );
   }
 }

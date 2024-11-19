@@ -25,6 +25,7 @@ class AddCategory extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
         child: Column(
           children: [
+            //========= Form Section =========
             Form(
               key: formkey,
               child: Column(
@@ -42,6 +43,7 @@ class AddCategory extends StatelessWidget {
                 ],
               ),
             ),
+            //========= Input Section =========
             Row(
               children: [
                 Expanded(
@@ -56,7 +58,7 @@ class AddCategory extends StatelessWidget {
                   onPressed: () async {
                     await Addcat(categoryShoe, context);
                   },
-                  color: const Color.fromARGB(255, 192, 42, 219),
+                  color: Colors.blue,
                 ),
                 SizedBox(width: screenWidth * 0.02),
                 Container(
@@ -75,13 +77,14 @@ class AddCategory extends StatelessWidget {
             ),
             SizedBox(height: screenHeight * 0.1),
             const Divider(),
+
+            //========= Category List Section =========
             Expanded(
               child: ListView.builder(
                 itemCount: categoryShoe.categories.length,
                 itemBuilder: (context, index) {
                   final category = categoryShoe.categories[index];
-                  if (category.imageUrl == null ||
-                      category.categoryName.isEmpty) {
+                  if (category.categoryName.isEmpty) {
                     return const SizedBox.shrink();
                   }
                   return Padding(
@@ -133,7 +136,7 @@ class AddCategory extends StatelessWidget {
                                 category: category, formkey: formkey),
                             ButtonCustomized(
                               text: "Delete",
-                              color: const Color.fromARGB(255, 192, 42, 219),
+                              color: Colors.blue,
                               onPressed: () {
                                 showAlertDialog(
                                     context,

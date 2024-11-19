@@ -22,17 +22,46 @@ class OrderDetails extends StatelessWidget {
           Card(
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             elevation: 4,
-            child: Table(
-              children: const [
-                TableRow(children: [
-                  Text('Sl No'),
-                  Text('Payment Id'),
-                  Text('Product Name'),
-                  Text('Date and Time'),
-                  Text('Total Amount'),
-                  Text('Status'),
-                ])
-              ],
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(7),
+                color: Colors.blue,
+              ),
+              height: 40,
+              child: Table(
+                border: TableBorder.all(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                children: const [
+                  TableRow(children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: Text('Sl No')),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: Text('Payment Id')),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: Text('Product Name')),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: Text('Date and Time')),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: Text('Total Amount')),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: Text('Status')),
+                    ),
+                  ])
+                ],
+              ),
             ),
           ),
           Consumer<Orders>(
@@ -71,39 +100,68 @@ class OrderDetails extends StatelessWidget {
                       }
                     }
 
-                    return Column(
-                      children: [
-                        Table(
-                          children: [
-                            TableRow(children: [
-                              Text("${index + 1}"),
-                              Text(order['paymentId'] ?? 'N/A'),
-                              Text(productName),
-                              Text(formattedTimestamp),
-                              Text(order['totalAmount'].toString()),
-                              DropdownButton(
-                                value: order['status'],
-                                items: statusOptions.map((String status) {
-                                  print(order['status']);
-                                  return DropdownMenuItem(
-                                    value: status,
-                                    child: Text(status),
-                                  );
-                                }).toList(),
-                                onChanged: (newStatus) {
-                                  if (newStatus != null) {
-                                    ordersProvider.updateOrder(
-                                      uid,
-                                      order['orderId'],
-                                      {'status': newStatus},
-                                    );
-                                  }
-                                },
-                              ),
-                            ]),
-                          ],
-                        ),
-                      ],
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          Table(
+                            border: TableBorder.all(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            children: [
+                              TableRow(children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(child: Text("${index + 1}")),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                      child: Text(order['paymentId'] ?? 'N/A')),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(child: Text(productName)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child:
+                                      Center(child: Text(formattedTimestamp)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                      child: Text(
+                                          order['totalAmount'].toString())),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: DropdownButton(
+                                    value: order['status'],
+                                    items: statusOptions.map((String status) {
+                                      print(order['status']);
+                                      return DropdownMenuItem(
+                                        value: status,
+                                        child: Text(status),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newStatus) {
+                                      if (newStatus != null) {
+                                        ordersProvider.updateOrder(
+                                          uid,
+                                          order['orderId'],
+                                          {'status': newStatus},
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ]),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),

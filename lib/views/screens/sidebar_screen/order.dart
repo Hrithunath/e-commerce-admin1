@@ -19,76 +19,111 @@ class OrderList extends StatelessWidget {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           var users = snapshot.data!;
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                var user = users[index];
-                return Card(
-                  elevation: 5,
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          color: Colors.green,
-                        ),
-                        height: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Table(
-                            children: const [
-                              TableRow(children: [
-                                TextCustom(text: 'Sl No'),
-                                TextCustom(text: 'User Name'),
-                                TextCustom(text: 'Email'),
-                              ]),
-                            ],
-                          ),
-                        ),
+          return ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              var user = users[index];
+              return Card(
+                elevation: 5,
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(7),
+                        color: Colors.blue,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Table(
-                          children: [
+                          children: const [
                             TableRow(children: [
-                              TextCustom(text: (index + 1).toString()),
-                              TextCustom(text: user['name'] ?? 'No Name'),
-                              TextCustom(text: user['email'] ?? 'No email'),
-                              SizedBox(
-                                height: 30,
-                                width: 50,
-                                child: ButtonCustomized(
-                                    color: Colors.amber,
-                                    text: 'OrderDetails',
-                                    onPressed: () {
-                                      String uid = user['uid'].toString();
-                                      print(uid);
-                                      if (user['name'] != null &&
-                                          user['email'] != null) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                OrderDetails(uid: uid),
-                                          ),
-                                        );
-                                        print("User tapped: ${user['name']}");
-                                      } else {
-                                        print("User details are incomplete.");
-                                      }
-                                    }),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(child: TextCustom(text: 'Sl No')),
                               ),
-                            ])
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                    child: TextCustom(text: 'User Name')),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(child: TextCustom(text: 'Email')),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                    child: TextCustom(text: 'Order Details')),
+                              ),
+                            ]),
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Table(
+                        children: [
+                          TableRow(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child:
+                                      TextCustom(text: (index + 1).toString())),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: TextCustom(
+                                      text: user['name'] ?? 'No Name')),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: TextCustom(
+                                      text: user['email'] ?? 'No email')),
+                            ),
+                            SizedBox(
+                              width: 50,
+                              child: Center(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      minimumSize: Size.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap),
+                                  onPressed: () {
+                                    String uid = user['uid'].toString();
+                                    print(uid);
+                                    if (user['name'] != null &&
+                                        user['email'] != null) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              OrderDetails(uid: uid),
+                                        ),
+                                      );
+                                      print("User tapped: ${user['name']}");
+                                    } else {
+                                      print("User details are incomplete.");
+                                    }
+                                  },
+                                  child: const Text(
+                                    'OrderDetails',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ])
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
           );
         } else {
           return const Center(child: Text('No users found.'));
