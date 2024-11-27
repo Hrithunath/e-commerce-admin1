@@ -42,8 +42,7 @@ class Textformfeildcustom extends StatelessWidget {
         maxLines: maxLines,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Color.fromARGB(255, 235, 233, 233))),
+              borderSide: BorderSide(color: Colors.grey)),
           hintText: hintText,
           labelText: label,
           labelStyle:

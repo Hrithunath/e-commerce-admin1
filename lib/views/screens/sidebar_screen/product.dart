@@ -139,7 +139,8 @@ class ProductList extends StatelessWidget {
                                       TableRow(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 15),
                                             child: Center(
                                                 child: TextCustom(
                                                     text: "${index + 1}")),
@@ -153,85 +154,73 @@ class ProductList extends StatelessWidget {
                                                 child: Align(
                                                   alignment:
                                                       Alignment.bottomLeft,
-                                                  child:
-                                                      (product.uploadImages !=
-                                                                  null &&
-                                                              product
-                                                                  .uploadImages
-                                                                  .isNotEmpty)
-                                                          ? Image.network(
-                                                              product
-                                                                  .uploadImages[0],
+                                                  child: (product.uploadImages
+                                                          .isNotEmpty)
+                                                      ? Image.network(
+                                                          product
+                                                              .uploadImages[0],
+                                                          height: screenHeight *
+                                                              0.05,
+                                                          width: screenWidth *
+                                                              0.04,
+                                                          fit: BoxFit.cover,
+                                                          errorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return Container(
                                                               height:
                                                                   screenHeight *
                                                                       0.05,
                                                               width:
                                                                   screenWidth *
                                                                       0.04,
-                                                              fit: BoxFit.cover,
-                                                              errorBuilder:
-                                                                  (context,
-                                                                      error,
-                                                                      stackTrace) {
-                                                                return Container(
-                                                                  height:
-                                                                      screenHeight *
-                                                                          0.05,
-                                                                  width:
-                                                                      screenWidth *
-                                                                          0.04,
-                                                                  color: Colors
-                                                                      .red,
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Icon(
-                                                                        Icons
-                                                                            .error,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                );
-                                                              },
-                                                            )
-                                                          : Container(
-                                                              height:
-                                                                  screenHeight *
-                                                                      0.05,
-                                                              width:
-                                                                  screenWidth *
-                                                                      0.04,
-                                                              color:
-                                                                  Colors.amber,
+                                                              color: Colors.red,
                                                               child:
                                                                   const Center(
                                                                 child: Icon(
-                                                                    Icons.image,
+                                                                    Icons.error,
                                                                     color: Colors
                                                                         .white),
                                                               ),
-                                                            ),
+                                                            );
+                                                          },
+                                                        )
+                                                      : Container(
+                                                          height: screenHeight *
+                                                              0.05,
+                                                          width: screenWidth *
+                                                              0.04,
+                                                          color: Colors.amber,
+                                                          child: const Center(
+                                                            child: Icon(
+                                                                Icons.image,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
                                             child: Center(
                                               child: TextCustom(
                                                   text: product.productName),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
                                             child: Center(
                                               child: TextCustom(
-                                                  text:
-                                                      category?.categoryName ??
-                                                          "No Category"),
+                                                  text: category.categoryName),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
                                             child: Center(
                                               child: TextCustom(
                                                   text:
@@ -239,7 +228,8 @@ class ProductList extends StatelessWidget {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
                                             child: Center(
                                               child: TextCustom(
                                                   text:
@@ -247,7 +237,8 @@ class ProductList extends StatelessWidget {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
                                             child: Center(
                                               child: TextCustom(
                                                   text:

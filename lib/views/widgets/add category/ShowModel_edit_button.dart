@@ -62,7 +62,9 @@ class ShowModelBottomSheetEditButton extends StatelessWidget {
                             onPressed: () async {
                               await categoryShoe.pickImage();
                             },
-                            icon: const Icon(Icons.add),
+                            icon: const Icon(
+                              Icons.add_a_photo,
+                            ),
                           ),
                         ],
                       ),

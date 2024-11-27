@@ -22,7 +22,7 @@ class EditProduct extends StatefulWidget {
 }
 
 class _EditProductState extends State<EditProduct> {
-  late final ProductModel product;
+  ProductModel? product;
   late final CategoryShoe categoryShoe;
   final productNameController = TextEditingController();
   final productDescriptionController = TextEditingController();
@@ -41,15 +41,15 @@ class _EditProductState extends State<EditProduct> {
 
     if (product != null) {
       productNameController.text = product!.productName;
-      productDescriptionController.text = product.productDescription;
-      priceController.text = product.price.toString();
-      stockController.text = product.stock.toString();
+      productDescriptionController.text = product!.productDescription;
+      priceController.text = product!.price.toString();
+      stockController.text = product!.stock.toString();
 
       // Set selected size and category
       Provider.of<SizeProvider>(context, listen: false)
-          .setSelectedSize(product.sizes);
+          .setSelectedSize(product!.sizes);
       Provider.of<CategoryShoe>(context, listen: false)
-          .setCategory(product.category);
+          .setCategory(product!.category);
     }
   }
 
@@ -65,6 +65,12 @@ class _EditProductState extends State<EditProduct> {
     }
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(
+        255,
+        228,
+        230,
+        223,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
@@ -85,14 +91,15 @@ class _EditProductState extends State<EditProduct> {
                         ),
                       ),
                       Container(
-                        width: screenWidth * 0.9,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 204, 199, 199),
+                        child: const Column(
+                          children: [],
                         ),
+                      ),
+                      Container(
+                        color: Colors.white,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.02,
-                              vertical: screenHeight * 0.02),
+                          padding: const EdgeInsets.only(
+                              left: 25, right: 500, top: 15, bottom: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -102,7 +109,6 @@ class _EditProductState extends State<EditProduct> {
                                 fontWeight: FontWeight.w700,
                               ),
                               SizedBox(height: screenHeight * 0.02),
-
                               const TextCustom(
                                 text: "Product Name",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -122,7 +128,6 @@ class _EditProductState extends State<EditProduct> {
                                 },
                               ),
                               SizedBox(height: screenHeight * 0.02),
-
                               const TextCustom(
                                 text: "Product Description",
                                 color: Color.fromARGB(255, 112, 111, 111),
@@ -142,107 +147,265 @@ class _EditProductState extends State<EditProduct> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: screenHeight * 0.02),
-
-                              const TextCustom(
-                                text: "Size",
-                                color: Color.fromARGB(255, 112, 111, 111),
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              SizedBox(height: screenHeight * 0.02),
-                              const SizeSelectionWidget(),
-                              SizedBox(height: screenHeight * 0.02),
-                              // Price and Stock Section
-                              const TextCustom(
-                                text: "Price and Stock",
-                                fontSize: 19,
-                                fontWeight: FontWeight.w900,
-                              ),
-                              SizedBox(height: screenHeight * 0.02),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const TextCustom(
-                                            text: "Price", fontSize: 17),
-                                        SizedBox(height: screenHeight * 0.01),
-                                        Textformfeildcustom(
-                                          label: "",
-                                          backgroundcolor: Colors.white,
-                                          controller: priceController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please provide the Price.';
-                                            } else if (double.tryParse(value) ==
-                                                    null ||
-                                                double.parse(value) <= 0) {
-                                              return 'Please provide a valid positive number for Price.';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: screenWidth * 0.05),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const TextCustom(
-                                            text: "Stock", fontSize: 17),
-                                        SizedBox(height: screenHeight * 0.01),
-                                        Textformfeildcustom(
-                                          label: "",
-                                          backgroundcolor: Colors.white,
-                                          controller: stockController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please provide the stock.';
-                                            } else if (int.tryParse(value) ==
-                                                    null ||
-                                                int.parse(value) < 0) {
-                                              return 'Please provide a valid non-negative number for Stock.';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // New Arrival Checkbox
-                              CheckboxListTile(
-                                title: const Text("New Arrival"),
-                                value: productShoe.isNewArrival,
-                                onChanged: (bool? value) {
-                                  productShoe.toggleNewArrival();
-                                },
-                              ),
-                              // Top Collection Checkbox
-                              CheckboxListTile(
-                                title: const Text("Top Collection"),
-                                value: productShoe.isTopCollection,
-                                onChanged: (bool? value) {
-                                  productShoe.toggleTopCollection();
-                                },
-                              ),
                             ],
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.05,
+                              vertical: screenHeight * 0.09),
+                          child: Container(
+                            height: screenHeight * 0.6,
+                            width: screenWidth * 0.9,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.02,
+                                  vertical: screenHeight * 0.02),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const TextCustom(
+                                    text: "Upload image",
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  SizedBox(height: screenHeight * 0.02),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        height: screenHeight * 0.3,
+                                        width: screenWidth * 0.2,
+                                        child: productShoe.pickedImages !=
+                                                    null &&
+                                                productShoe
+                                                    .pickedImages!.isNotEmpty
+                                            ? Image.memory(
+                                                productShoe.pickedImages![0],
+                                                fit: BoxFit.cover,
+                                              )
+                                            : (product!.uploadImages.isNotEmpty
+                                                ? Image.network(
+                                                    product!.uploadImages[0],
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : const Center(
+                                                    child: Text(
+                                                        "No Image Selected"),
+                                                  )),
+                                      ),
+                                      IconButton(
+                                        onPressed: () =>
+                                            productShoe.pickImages(),
+                                        icon: const Icon(
+                                          Icons.add_a_photo,
+                                          size: 33,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: screenHeight * 0.02),
+                                  SizedBox(
+                                    height: screenHeight * 0.1,
+                                    child: CarouselView(
+                                      scrollDirection: Axis.horizontal,
+                                      itemExtent: screenWidth * 0.06,
+                                      children: List.generate(
+                                        (productShoe.pickedImages?.length ??
+                                                0) +
+                                            product!.uploadImages
+                                                .length, // Total count
+                                        (index) {
+                                          if (index <
+                                              (productShoe
+                                                      .pickedImages?.length ??
+                                                  0)) {
+                                            return Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              color: Colors.white,
+                                              child: Image.memory(
+                                                productShoe
+                                                    .pickedImages![index],
+                                                fit: BoxFit.cover,
+                                                width: screenWidth * 0.2,
+                                                height: screenHeight * 0.2,
+                                              ),
+                                            );
+                                          } else {
+                                            int uploadIndex = index -
+                                                (productShoe
+                                                        .pickedImages?.length ??
+                                                    0);
+                                            if (uploadIndex <
+                                                product!.uploadImages.length) {
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                color: Colors.white,
+                                                child: Image.network(
+                                                  product!.uploadImages[
+                                                      uploadIndex],
+                                                  fit: BoxFit.cover,
+                                                  width: screenWidth * 0.2,
+                                                  height: screenHeight * 0.2,
+                                                ),
+                                              );
+                                            } else {
+                                              return const SizedBox.shrink();
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.07),
+                      Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 25, right: 500, top: 15, bottom: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TextCustom(
+                                  text: "Category",
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                SizedBox(height: screenHeight * 0.02),
+                                const TextCustom(
+                                  text: "Product Category",
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(height: screenHeight * 0.02),
+                                const DropDownWidget(),
+                                const TextCustom(
+                                  text: "Size",
+                                  color: Color.fromARGB(255, 112, 111, 111),
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                SizedBox(height: screenHeight * 0.02),
+                                const SizeSelectionWidget(),
+                                SizedBox(height: screenHeight * 0.02),
+                                // Price and Stock Section
+                                const TextCustom(
+                                  text: "Price and Stock",
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                SizedBox(height: screenHeight * 0.02),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const TextCustom(
+                                              text: "Price", fontSize: 17),
+                                          SizedBox(height: screenHeight * 0.01),
+                                          Textformfeildcustom(
+                                            label: "",
+                                            backgroundcolor: Colors.white,
+                                            controller: priceController,
+                                            keyboardType: TextInputType.number,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please provide the Price.';
+                                              } else if (double.tryParse(
+                                                          value) ==
+                                                      null ||
+                                                  double.parse(value) <= 0) {
+                                                return 'Please provide a valid positive number for Price.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: screenWidth * 0.05),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const TextCustom(
+                                              text: "Stock", fontSize: 17),
+                                          SizedBox(height: screenHeight * 0.01),
+                                          Textformfeildcustom(
+                                            label: "",
+                                            backgroundcolor: Colors.white,
+                                            controller: stockController,
+                                            keyboardType: TextInputType.number,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please provide the stock.';
+                                              } else if (int.tryParse(value) ==
+                                                      null ||
+                                                  int.parse(value) < 0) {
+                                                return 'Please provide a valid non-negative number for Stock.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // New Arrival Checkbox
+                                CheckboxListTile(
+                                  title: const Text("New Arrival"),
+                                  value: productShoe.isNewArrival,
+                                  onChanged: (bool? value) {
+                                    productShoe.toggleNewArrival();
+                                  },
+                                ),
+                                // Top Collection Checkbox
+                                CheckboxListTile(
+                                  title: const Text("Top Collection"),
+                                  value: productShoe.isTopCollection,
+                                  onChanged: (bool? value) {
+                                    productShoe.toggleTopCollection();
+                                  },
+                                ),
+                              ],
+                            ),
+                          )),
                       SizedBox(height: screenHeight * 0.02),
                       Center(
                         child: ButtonCustomized(
@@ -288,7 +451,7 @@ class _EditProductState extends State<EditProduct> {
 
                               try {
                                 await productShoe.editProduct(
-                                    product, categoryShoe,
+                                    product!, categoryShoe,
                                     productName: productNameController.text,
                                     description:
                                         productDescriptionController.text,
@@ -302,6 +465,13 @@ class _EditProductState extends State<EditProduct> {
                                 productDescriptionController.clear();
                                 priceController.clear();
                                 stockController.clear();
+                                // Clear size and category after saving
+                                Provider.of<SizeProvider>(context,
+                                        listen: false)
+                                    .clearSize();
+                                Provider.of<CategoryShoe>(context,
+                                        listen: false)
+                                    .clearCategory();
 
                                 // Navigate back or show a success message
                                 Navigator.of(context).pop();
@@ -315,132 +485,6 @@ class _EditProductState extends State<EditProduct> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.05,
-                        vertical: screenHeight * 0.09),
-                    child: Container(
-                      height: screenHeight * 0.8,
-                      width: screenWidth * 0.9,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 204, 199, 199),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.02,
-                            vertical: screenHeight * 0.02),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const TextCustom(
-                              text: "Upload image",
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            Row(
-                              children: [
-                                Container(
-                                  color: Colors.white,
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.2,
-                                  child: productShoe.pickedImages != null &&
-                                          productShoe.pickedImages!.isNotEmpty
-                                      ? Image.memory(
-                                          productShoe.pickedImages![0],
-                                          fit: BoxFit.cover,
-                                        )
-                                      : (product.uploadImages.isNotEmpty
-                                          ? Image.network(
-                                              product.uploadImages[0],
-                                              fit: BoxFit.cover,
-                                            )
-                                          : const Center(
-                                              child: Text("No Image Selected"),
-                                            )),
-                                ),
-                                IconButton(
-                                  onPressed: () => productShoe.pickImages(),
-                                  icon: const Icon(
-                                    Icons.add,
-                                    size: 33,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            SizedBox(
-                              height: screenHeight * 0.1,
-                              child: CarouselView(
-                                scrollDirection: Axis.horizontal,
-                                itemExtent: screenWidth * 0.06,
-                                children: List.generate(
-                                  (productShoe.pickedImages?.length ?? 0) +
-                                      product
-                                          .uploadImages.length, // Total count
-                                  (index) {
-                                    if (index <
-                                        (productShoe.pickedImages?.length ??
-                                            0)) {
-                                      return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        color: Colors.white,
-                                        child: Image.memory(
-                                          productShoe.pickedImages![index],
-                                          fit: BoxFit.cover,
-                                          width: screenWidth * 0.2,
-                                          height: screenHeight * 0.2,
-                                        ),
-                                      );
-                                    } else {
-                                      int uploadIndex = index -
-                                          (productShoe.pickedImages?.length ??
-                                              0);
-                                      if (uploadIndex <
-                                          product.uploadImages.length) {
-                                        return Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 8),
-                                          color: Colors.white,
-                                          child: Image.network(
-                                            product.uploadImages[uploadIndex],
-                                            fit: BoxFit.cover,
-                                            width: screenWidth * 0.2,
-                                            height: screenHeight * 0.2,
-                                          ),
-                                        );
-                                      } else {
-                                        return const SizedBox
-                                            .shrink(); // For safety, return empty space for any extra indexes
-                                      }
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: screenHeight * 0.07),
-                            const TextCustom(
-                              text: "Category",
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            const TextCustom(
-                              text: "Product Category",
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            const DropDownWidget(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
           ),

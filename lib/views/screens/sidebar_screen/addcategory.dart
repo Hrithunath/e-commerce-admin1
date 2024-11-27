@@ -71,7 +71,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => categoryShoe.pickImage(),
-                  icon: const Icon(Icons.add, size: 33),
+                  icon: const Icon(Icons.add_a_photo, size: 33),
                 ),
               ],
             ),

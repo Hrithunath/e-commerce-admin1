@@ -31,6 +31,12 @@ class AddProduct extends StatelessWidget {
     final formkey = GlobalKey<FormState>();
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(
+        255,
+        228,
+        230,
+        223,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
@@ -51,113 +57,261 @@ class AddProduct extends StatelessWidget {
                       )),
 
                       //========= General Information Section =========
-                      Container(
-                        width: screenWidth * 0.9,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 226, 220, 220),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.02,
-                              vertical: screenHeight * 0.02),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const TextCustom(
-                                text: "General Information",
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              SizedBox(height: screenHeight * 0.02),
-                              //========= Product Name Field =========
-                              const TextCustom(
-                                text: "Product Name",
-                                color: Color.fromARGB(255, 112, 111, 111),
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
-                              ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.02,
+                            vertical: screenHeight * 0.02),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //========= Product Name Field =========
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 25, right: 500, top: 15, bottom: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const TextCustom(
+                                      text: "General Information",
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    SizedBox(height: screenHeight * 0.02),
+                                    const TextCustom(
+                                      text: "Product Name",
+                                      color: Color.fromARGB(255, 112, 111, 111),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w700,
+                                    ),
 
-                              Textformfeildcustom(
-                                label: "",
-                                backgroundcolor: Colors.white,
-                                controller: productNameController,
-                                keyboardType: TextInputType.name,
-                                validator: (value) =>
-                                    Validator.validateProductName(value),
-                              ),
-                              SizedBox(height: screenHeight * 0.02),
+                                    Textformfeildcustom(
+                                      label: "",
+                                      controller: productNameController,
+                                      keyboardType: TextInputType.name,
+                                      validator: (value) =>
+                                          Validator.validateProductName(value),
+                                    ),
+                                    SizedBox(height: screenHeight * 0.02),
 
-                              //========= Product Description Field =========
-                              const TextCustom(
-                                text: "Product Description",
-                                color: Color.fromARGB(255, 112, 111, 111),
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
-                              ),
+                                    //========= Product Description Field =========
+                                    const TextCustom(
+                                      text: "Product Description",
+                                      color: Color.fromARGB(255, 112, 111, 111),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w700,
+                                    ),
 
-                              Textformfeildcustom(
-                                  maxLines: 6,
-                                  label: "",
-                                  backgroundcolor: Colors.white,
-                                  controller: productDescriptionController,
-                                  keyboardType: TextInputType.text,
-                                  validator: (value) =>
-                                      Validator.validateProductDescription(
-                                          value)),
-                              SizedBox(height: screenHeight * 0.02),
+                                    Textformfeildcustom(
+                                      maxLines: 6,
+                                      label: "",
+                                      controller: productDescriptionController,
+                                      keyboardType: TextInputType.text,
+                                      validator: (value) =>
+                                          Validator.validateProductDescription(
+                                              value),
+                                    ),
+                                    SizedBox(height: screenHeight * 0.02),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
 
-                              //========= Size Selection Widget =========
-                              const TextCustom(
-                                text: "Size",
-                                color: Color.fromARGB(255, 112, 111, 111),
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
+                            //========= Right side for image upload section =========
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
                               ),
-                              SizedBox(height: screenHeight * 0.02),
-                              const SizeSelectionWidget(),
-                              SizedBox(height: screenHeight * 0.02),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.05,
+                                    vertical: screenHeight * 0.09),
+                                child: Container(
+                                  height: screenHeight * 0.6,
+                                  width: screenWidth * 0.9,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 0.02,
+                                        vertical: screenHeight * 0.02),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const TextCustom(
+                                          text: "Upload image",
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              height: screenHeight * 0.3,
+                                              width: screenWidth * 0.2,
+                                              child: productShoe.pickedImages !=
+                                                          null &&
+                                                      productShoe.pickedImages!
+                                                          .isNotEmpty
+                                                  ? Image.memory(
+                                                      productShoe
+                                                          .pickedImages![0],
+                                                    )
+                                                  : const Center(
+                                                      child: Text(
+                                                          "No Image Selected")),
+                                            ),
+                                            IconButton(
+                                                onPressed: () =>
+                                                    productShoe.pickImages(),
+                                                icon: const Icon(
+                                                  Icons.add_a_photo,
+                                                  size: 33,
+                                                )),
+                                          ],
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02),
+                                        SizedBox(
+                                          height: screenHeight * 0.1,
+                                          child: CarouselView(
+                                            scrollDirection: Axis.horizontal,
+                                            itemExtent: screenWidth * 0.06,
+                                            children: List.generate(
+                                              productShoe
+                                                      .pickedImages?.length ??
+                                                  0,
+                                              (int index) {
+                                                return Container(
+                                                  color: Colors.white,
+                                                  child:
+                                                      productShoe.pickedImages !=
+                                                                  null &&
+                                                              productShoe
+                                                                  .pickedImages!
+                                                                  .isNotEmpty
+                                                          ? Image.memory(
+                                                              productShoe
+                                                                      .pickedImages![
+                                                                  index],
+                                                            )
+                                                          : const Center(
+                                                              child: Text(
+                                                                  "No Image Selected"),
+                                                            ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 25,
+                                      right: 500,
+                                      top: 15,
+                                      bottom: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const TextCustom(
+                                        text: "Category",
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      const TextCustom(
+                                        text: "Product Category",
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      const DropDownWidget(),
 
-                              //========= Price and Stock Section =========
-                              const TextCustom(
-                                text: "Price and Stock",
-                                fontSize: 19,
-                                fontWeight: FontWeight.w900,
-                              ),
-                              SizedBox(height: screenHeight * 0.02),
+                                      //========= Size Selection Widget =========
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      const TextCustom(
+                                        text: "Size",
+                                        color:
+                                            Color.fromARGB(255, 112, 111, 111),
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      const SizeSelectionWidget(),
+                                      SizedBox(height: screenHeight * 0.02),
 
-                              //========= Price and Stock input fields side by side =========
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Price(
-                                      screenHeight: screenHeight,
-                                      priceController: priceController),
-                                  SizedBox(width: screenWidth * 0.05),
-                                  Stock(
-                                      screenHeight: screenHeight,
-                                      stockController: stockController),
-                                ],
-                              ),
-                              //========= Checkbox for New Arrival =========
-                              CheckboxListTile(
-                                title: const Text("New Arrival"),
-                                value: productShoe.isNewArrival,
-                                onChanged: (bool? value) {
-                                  productShoe.toggleNewArrival();
-                                },
-                              ),
+                                      //========= Price and Stock Section =========
+                                      const TextCustom(
+                                        text: "Price and Stock",
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
 
-                              //========= Checkbox for Top Collection =========
-                              CheckboxListTile(
-                                title: const Text("Top Collection"),
-                                value: productShoe.isTopCollection,
-                                onChanged: (bool? value) {
-                                  productShoe.toggleTopCollection();
-                                },
-                              ),
-                            ],
-                          ),
+                                      //========= Price and Stock input fields side by side =========
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Price(
+                                              screenHeight: screenHeight,
+                                              priceController: priceController),
+                                          SizedBox(width: screenWidth * 0.05),
+                                          Stock(
+                                              screenHeight: screenHeight,
+                                              stockController: stockController),
+                                        ],
+                                      ),
+                                      //========= Checkbox for New Arrival =========
+                                      CheckboxListTile(
+                                        title: const Text("New Arrival"),
+                                        value: productShoe.isNewArrival,
+                                        onChanged: (bool? value) {
+                                          productShoe.toggleNewArrival();
+                                        },
+                                      ),
+
+                                      //========= Checkbox for Top Collection =========
+                                      CheckboxListTile(
+                                        title: const Text("Top Collection"),
+                                        value: productShoe.isTopCollection,
+                                        onChanged: (bool? value) {
+                                          productShoe.toggleTopCollection();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                          ],
                         ),
                       ),
 
@@ -250,99 +404,6 @@ class AddProduct extends StatelessWidget {
                     ],
                   ),
                 ),
-                //========= Right side for image upload section =========
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.05,
-                        vertical: screenHeight * 0.09),
-                    child: Container(
-                      height: screenHeight * 0.8,
-                      width: screenWidth * 0.9,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 226, 220, 220),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.02,
-                            vertical: screenHeight * 0.02),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const TextCustom(
-                              text: "Upload image",
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            Row(
-                              children: [
-                                Container(
-                                  color: Colors.white,
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.2,
-                                  child: productShoe.pickedImages != null &&
-                                          productShoe.pickedImages!.isNotEmpty
-                                      ? Image.memory(
-                                          productShoe.pickedImages![0],
-                                        )
-                                      : const Center(
-                                          child: Text("No Image Selected")),
-                                ),
-                                IconButton(
-                                    onPressed: () => productShoe.pickImages(),
-                                    icon: const Icon(
-                                      Icons.add,
-                                      size: 33,
-                                    )),
-                              ],
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            SizedBox(
-                              height: screenHeight * 0.1,
-                              child: CarouselView(
-                                scrollDirection: Axis.horizontal,
-                                itemExtent: screenWidth * 0.06,
-                                children: List.generate(
-                                  productShoe.pickedImages?.length ?? 0,
-                                  (int index) {
-                                    return Container(
-                                      color: Colors.white,
-                                      child: productShoe.pickedImages != null &&
-                                              productShoe
-                                                  .pickedImages!.isNotEmpty
-                                          ? Image.memory(
-                                              productShoe.pickedImages![index],
-                                            )
-                                          : const Center(
-                                              child: Text("No Image Selected"),
-                                            ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: screenHeight * 0.07),
-                            const TextCustom(
-                              text: "Category",
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            const TextCustom(
-                              text: "Product Category",
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            const DropDownWidget(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
           ),

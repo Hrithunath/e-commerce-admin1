@@ -1,4 +1,3 @@
-
 import 'package:e_commerce_admin/view_model/provider/provider/size.dart';
 import 'package:e_commerce_admin/views/widgets/text.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,8 @@ class SizeSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sizeProvider = Provider.of<SizeProvider>(context);
-    final List<String> shoeSizes =["6","7","8","9"];
+
+    final List<String> shoeSizes = ["6", "7", "8", "9"];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
