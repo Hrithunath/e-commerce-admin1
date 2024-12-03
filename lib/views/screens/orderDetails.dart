@@ -87,13 +87,13 @@ class OrderDetails extends StatelessWidget {
                       try {
                         if (order['timestamp'] is Timestamp) {
                           Timestamp timestamp = order['timestamp'];
-                          formattedTimestamp = DateFormat('yyyy-MM-dd HH:mm')
+                          formattedTimestamp = DateFormat('dd-MM-yyyy HH:mm')
                               .format(timestamp.toDate());
                         } else {
                           DateTime parsedDate =
                               DateTime.parse(order['timestamp']);
                           formattedTimestamp =
-                              DateFormat('yyyy-MM-dd HH:mm').format(parsedDate);
+                              DateFormat('dd-MM-yyyy HH:mm').format(parsedDate);
                         }
                       } catch (e) {
                         formattedTimestamp = 'Invalid Date';
